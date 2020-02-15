@@ -4,6 +4,7 @@
   "author": "stavalfi <stava@wix.com>",
   "license": "MIT",
   "private": true,
+  "experimentalMonorepoPublish": true,
   "repository": {
     "url": "https://github.com/wix-incubator/jest-simple-json-reporter"
   },
