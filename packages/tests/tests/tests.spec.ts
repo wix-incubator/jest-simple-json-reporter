@@ -32,7 +32,7 @@ test('dont specify output-path and use the default - run reporter on project wit
           test: jestPath,
         },
         jest: {
-          reporters: [[jestSimpleJsonReporterPath, {}]],
+          reporters: ['default',[jestSimpleJsonReporterPath, {}]],
         },
       },
       '.npmrc': 'registry=https://registry.npmjs.org/',
@@ -73,7 +73,7 @@ test('dont specify output-path and use the default - run reporter on project wit
           test: jestPath,
         },
         jest: {
-          reporters: [[jestSimpleJsonReporterPath, {}]],
+          reporters: ['default',[jestSimpleJsonReporterPath, {}]],
         },
       },
       '.npmrc': 'registry=https://registry.npmjs.org/',
@@ -156,7 +156,7 @@ test('sepcify output-path - specify reporter without array - tests pass', async 
           test: jestPath,
         },
         jest: {
-          reporters: [[jestSimpleJsonReporterPath, { outputPath: './custom-path.json' }]],
+          reporters: ['default',[jestSimpleJsonReporterPath, { outputPath: './custom-path.json' }]],
         },
       },
       '.npmrc': 'registry=https://registry.npmjs.org/',
