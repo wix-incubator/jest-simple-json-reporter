@@ -1,0 +1,45 @@
+{
+  "name": "main",
+  "main": "src/index.js",
+  "author": "stavalfi <stava@wix.com>",
+  "license": "MIT",
+  "private": true,
+  "repository": {
+    "url": "https://github.com/wix-incubator/jest-simple-json-reporter"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "test": "yarn ava --verbose",
+    "build": "yarn pretty-quick",
+    "prepublish": "yarn test && yarn build"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^8.0.1",
+    "@types/mkdirp": "^0.5.2",
+    "@types/node": "^13.1.0",
+    "@types/path-exists": "^4.0.2",
+    "ava": "2.x.x",
+    "create-folder-structure": "^2.1.0",
+    "execa": "^4.0.0",
+    "is-directory": "^0.3.1",
+    "jest": "^25.1.0",
+    "path-exists": "^4.0.0",
+    "prettier": "^1.19.1",
+    "ts-node": "^8.6.2",
+    "typescript": "^3.7.5"
+  },
+  "ava": {
+    "compileEnhancements": false,
+    "files": [
+      "packages/tests/tests/**/*.spec.ts"
+    ],
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ]
+  }
+}
