@@ -14,13 +14,15 @@ yarn add --dev jest-simple-json-reporter
 
 Both examples will generate `jest-simple-json-reporter-results.json` next to `package.json`.
 
+- "default" reporter is the cli outout reporter. with out it, you wont see nothing on the console when running jest locally.
+
 1. In `package.json`
 
    ```typescript
    {
      jest: {
           ...,
-          reporters: [require.resolve('jest-simple-json-reporter')]
+          reporters: ["default", require.resolve('jest-simple-json-reporter')]
         },
    }
    ```
@@ -30,7 +32,7 @@ Both examples will generate `jest-simple-json-reporter-results.json` next to `pa
    ```typescript
    module.exports = {
     ...,
-    reporters: [require.resolve('jest-simple-json-reporter')]
+    reporters: ["default", require.resolve('jest-simple-json-reporter')]
    }
    ```
 
@@ -40,7 +42,10 @@ Custom output path/name:
 
 ```typescript
 // (dir1 and dir2 must exist!)
-reporters: [[require.resolve('jest-simple-json-reporter'),{outputPath:'./dir1/dir2/my-report-with-custom-name.json}]]
+reporters: [
+  'default',
+  [require.resolve('jest-simple-json-reporter'), { outputPath: './dir1/dir2/my-report-with-custom-name.json' }],
+]
 ```
 
 ---
