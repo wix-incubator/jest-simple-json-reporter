@@ -13,8 +13,7 @@
   ],
   "scripts": {
     "test": "yarn ava --verbose",
-    "build": "yarn pretty-quick",
-    "prepublish": "yarn test && yarn build"
+    "prettier": "yarn pretty-quick"
   },
   "devDependencies": {
     "@types/fs-extra": "^8.0.1",
