@@ -6,7 +6,6 @@ module.exports = class JestSimpleJsonReporter {
     this.outputPath = options.outputPath || './jest-simple-json-reporter-results.json'
   }
   onRunComplete(contexts, results) {
-    debugger
     const summary = {
       filesResult: (results.testResults || [])
         .map(fileResult => ({
@@ -27,7 +26,6 @@ module.exports = class JestSimpleJsonReporter {
       fileResult.testResults.every(fileResult => fileResult.passed),
     )
     const finalSummary = { passed, ...summary }
-    debugger
     fse.writeFileSync(this.outputPath, JSON.stringify(finalSummary, null, 2))
   }
 }
