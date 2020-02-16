@@ -8,6 +8,9 @@
   "repository": {
     "url": "https://github.com/wix-incubator/jest-simple-json-reporter"
   },
+  "publishConfig": {
+    "registry": "http://npm.dev.wixpress.com/"
+  },
   "dependencies": {
     "fs-extra": "^8.1.0"
   },
