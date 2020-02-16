@@ -1,7 +1,5 @@
 # Jest Simple Json Reporter
 
-Write the tests results as jest provides to a file. No transformations.
-
 ---
 
 ```bash
@@ -50,32 +48,29 @@ reporters: [
 
 ---
 
-Use can the output as (verified on jest@24.x):
+Types:
 
 ```typescript
-const resultsSummary = {
-  startTime: results.startTime,
-  wasInterrupted: results.wasInterrupted,
-  filesStatus: results.testResults.map(fileResult => {
-    return {
-      success: fileResult.numFailingTests > 0,
-      failureMessage: fileResult.failureMessage,
-      path: fileResult.testFilePath,
-      skipped: fileResult.skipped,
-      leaks: fileResult.leaks,
-      testResults: fileResult.testResults.map(testResult => {
-        return {
-          duration: testResult.duration,
-          didRun: testResult.status === 'failed' || testResult.status === 'passed',
-          success: testResult.status === 'failed',
-          fullName: testResult.fullName,
-          failureMessages: testResult.failureMessages,
-        }
-      }),
-    }
-  }),
+type JestSimpleJsonReporter = {
+  passed: boolean
+  filesResult: {
+    passed: boolean
+    path: string
+    testResults: {
+      didRun: boolean
+      passed: boolean
+      fullName: string
+    }[]
+  }[]
 }
 ```
+
+---
+
+Notes:
+
+1. if no tests are present in a file, then `file.passed === true`. (same as https://github.com/Hargne/jest-html-reporter)
+2. if no tests at all for the project, jest won't notify any reporter about it so no report-file will be generated.
 
 ---
 

@@ -5,7 +5,7 @@
     <artifactId>jest-simple-json-reporter</artifactId>
     <packaging>pom</packaging>
     <name>jest-simple-json-reporter</name>
-    <description>Write the tests results as jest provides to a file. No transformations</description>
+    <description>Write the tests results of jest.</description>
     <version>1.0.0-SNAPSHOT</version>
 
     <parent>
