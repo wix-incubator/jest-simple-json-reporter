@@ -5,6 +5,8 @@ import * as fse from 'fs-extra'
 import * as path from 'path'
 import * as fs from 'fs'
 
+const sortKeysRecursive =require('sort-keys-recursive') // not working with import syntax
+
 export type TestContext = {
   cleanup: () => Promise<void>
 }
@@ -13,7 +15,7 @@ const test = testWithTypedContext as TestInterface<TestContext>
 
 type JestSimpleJsonReporter = {
   passed: boolean
-  filesResult: {
+  filesResult:{
     passed: boolean
     path: string
     testResults: {
@@ -289,7 +291,7 @@ test('assert summary structure - tests pass', async t => {
   const expectedReport: JestSimpleJsonReporter = await fse.readJSON(
     path.join(entryPath, 'jest-simple-json-reporter-results.json'),
   )
-  t.deepEqual(expectedReport, {
+  t.deepEqual(sortKeysRecursive(expectedReport), sortKeysRecursive({
     passed: true,
     filesResult: [
       {
@@ -325,7 +327,7 @@ test('assert summary structure - tests pass', async t => {
         ],
       },
     ],
-  })
+  }))
 })
 
 test('assert summary structure - some tests fail', async t => {
@@ -375,7 +377,7 @@ test('assert summary structure - some tests fail', async t => {
   const expectedReport: JestSimpleJsonReporter = await fse.readJSON(
     path.join(entryPath, 'jest-simple-json-reporter-results.json'),
   )
-  t.deepEqual(expectedReport, {
+  t.deepEqual(sortKeysRecursive(expectedReport), sortKeysRecursive({
     passed: false,
     filesResult: [
       {
@@ -411,7 +413,7 @@ test('assert summary structure - some tests fail', async t => {
         ],
       },
     ],
-  })
+  }))
 })
 
 test('assert summary structure - no tests in each file', async t => {
@@ -445,7 +447,7 @@ test('assert summary structure - no tests in each file', async t => {
   const expectedReport: JestSimpleJsonReporter = await fse.readJSON(
     path.join(entryPath, 'jest-simple-json-reporter-results.json'),
   )
-  t.deepEqual(expectedReport, {
+  t.deepEqual(sortKeysRecursive(expectedReport), sortKeysRecursive({
     passed: true,
     filesResult: [
       {
@@ -459,5 +461,5 @@ test('assert summary structure - no tests in each file', async t => {
         testResults: [],
       },
     ],
-  })
+  }))
 })
