@@ -20,7 +20,7 @@ Both examples will generate `jest-simple-json-reporter-results.json` next to `pa
    {
      jest: {
           ...,
-          reporters: ["default", require.resolve('jest-simple-json-reporter')]
+          reporters: ['default', 'jest-simple-json-reporter']
         },
    }
    ```
@@ -30,7 +30,7 @@ Both examples will generate `jest-simple-json-reporter-results.json` next to `pa
    ```typescript
    module.exports = {
     ...,
-    reporters: ["default", require.resolve('jest-simple-json-reporter')]
+    reporters: ['default', 'jest-simple-json-reporter']
    }
    ```
 
@@ -42,7 +42,7 @@ Custom output path/name:
 // (dir1 and dir2 must exist!)
 reporters: [
   'default',
-  [require.resolve('jest-simple-json-reporter'), { outputPath: './dir1/dir2/my-report-with-custom-name.json' }],
+  'jest-simple-json-reporter', { outputPath: './dir1/dir2/my-report-with-custom-name.json' }],
 ]
 ```
 
