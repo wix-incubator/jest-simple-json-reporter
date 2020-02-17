@@ -22,10 +22,9 @@ module.exports = class JestSimpleJsonReporter {
         })),
     }
 
-    const passed = summary.filesResult.every(fileResult =>
-      fileResult.testResults.every(fileResult => fileResult.passed),
-    )
+    const passed = summary.filesResult.every(fileResult => fileResult.passed)
     const finalSummary = { passed, ...summary }
+    
     fse.writeFileSync(this.outputPath, JSON.stringify(finalSummary, null, 2))
   }
 }

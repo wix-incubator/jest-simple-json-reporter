@@ -29,7 +29,7 @@
     "lerna": "^3.20.2",
     "path-exists": "^4.0.0",
     "prettier": "^1.19.1",
-    "sort-keys-recursive": "^2.0.1",
+    "sort-deep-object-arrays": "^1.1.2",
     "ts-node": "^8.6.2",
     "typescript": "^3.7.5"
   },

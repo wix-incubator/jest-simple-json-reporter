@@ -5,7 +5,7 @@ import * as fse from 'fs-extra'
 import * as path from 'path'
 import * as fs from 'fs'
 
-const sortKeysRecursive =require('sort-keys-recursive') // not working with import syntax
+const sortDeepObjectArrays = require('sort-deep-object-arrays')
 
 export type TestContext = {
   cleanup: () => Promise<void>
@@ -15,7 +15,7 @@ const test = testWithTypedContext as TestInterface<TestContext>
 
 type JestSimpleJsonReporter = {
   passed: boolean
-  filesResult:{
+  filesResult: {
     passed: boolean
     path: string
     testResults: {
@@ -291,43 +291,46 @@ test('assert summary structure - tests pass', async t => {
   const expectedReport: JestSimpleJsonReporter = await fse.readJSON(
     path.join(entryPath, 'jest-simple-json-reporter-results.json'),
   )
-  t.deepEqual(sortKeysRecursive(expectedReport), sortKeysRecursive({
-    passed: true,
-    filesResult: [
-      {
-        passed: true,
-        path: path.join(entryPath, '__tests__', 'test1.spec.js'),
-        testResults: [
-          {
-            didRun: true,
-            passed: true,
-            fullName: '1 test-passed1!',
-          },
-          {
-            didRun: true,
-            passed: true,
-            fullName: '1 test-passed2!',
-          },
-        ],
-      },
-      {
-        passed: true,
-        path: path.join(entryPath, '__tests__', 'test2.spec.js'),
-        testResults: [
-          {
-            didRun: true,
-            passed: true,
-            fullName: '2 test-passed1!',
-          },
-          {
-            didRun: true,
-            passed: true,
-            fullName: '2 test-passed2!',
-          },
-        ],
-      },
-    ],
-  }))
+  t.deepEqual(
+    sortDeepObjectArrays(expectedReport),
+    sortDeepObjectArrays({
+      passed: true,
+      filesResult: [
+        {
+          passed: true,
+          path: path.join(entryPath, '__tests__', 'test1.spec.js'),
+          testResults: [
+            {
+              didRun: true,
+              passed: true,
+              fullName: '1 test-passed1!',
+            },
+            {
+              didRun: true,
+              passed: true,
+              fullName: '1 test-passed2!',
+            },
+          ],
+        },
+        {
+          passed: true,
+          path: path.join(entryPath, '__tests__', 'test2.spec.js'),
+          testResults: [
+            {
+              didRun: true,
+              passed: true,
+              fullName: '2 test-passed1!',
+            },
+            {
+              didRun: true,
+              passed: true,
+              fullName: '2 test-passed2!',
+            },
+          ],
+        },
+      ],
+    }),
+  )
 })
 
 test('assert summary structure - some tests fail', async t => {
@@ -377,43 +380,46 @@ test('assert summary structure - some tests fail', async t => {
   const expectedReport: JestSimpleJsonReporter = await fse.readJSON(
     path.join(entryPath, 'jest-simple-json-reporter-results.json'),
   )
-  t.deepEqual(sortKeysRecursive(expectedReport), sortKeysRecursive({
-    passed: false,
-    filesResult: [
-      {
-        passed: true,
-        path: path.join(entryPath, '__tests__', 'test1.spec.js'),
-        testResults: [
-          {
-            didRun: true,
-            passed: true,
-            fullName: '1 test-passed1!',
-          },
-          {
-            didRun: false,
-            passed: false,
-            fullName: '1 test-passed2!',
-          },
-        ],
-      },
-      {
-        passed: false,
-        path: path.join(entryPath, '__tests__', 'test2.spec.js'),
-        testResults: [
-          {
-            didRun: true,
-            passed: true,
-            fullName: '2 test-passed!',
-          },
-          {
-            didRun: true,
-            passed: false,
-            fullName: '2 test-failed!',
-          },
-        ],
-      },
-    ],
-  }))
+  t.deepEqual(
+    sortDeepObjectArrays(expectedReport),
+    sortDeepObjectArrays({
+      passed: false,
+      filesResult: [
+        {
+          passed: true,
+          path: path.join(entryPath, '__tests__', 'test1.spec.js'),
+          testResults: [
+            {
+              didRun: true,
+              passed: true,
+              fullName: '1 test-passed1!',
+            },
+            {
+              didRun: false,
+              passed: false,
+              fullName: '1 test-passed2!',
+            },
+          ],
+        },
+        {
+          passed: false,
+          path: path.join(entryPath, '__tests__', 'test2.spec.js'),
+          testResults: [
+            {
+              didRun: true,
+              passed: true,
+              fullName: '2 test-passed!',
+            },
+            {
+              didRun: true,
+              passed: false,
+              fullName: '2 test-failed!',
+            },
+          ],
+        },
+      ],
+    }),
+  )
 })
 
 test('assert summary structure - no tests in each file', async t => {
@@ -447,19 +453,95 @@ test('assert summary structure - no tests in each file', async t => {
   const expectedReport: JestSimpleJsonReporter = await fse.readJSON(
     path.join(entryPath, 'jest-simple-json-reporter-results.json'),
   )
-  t.deepEqual(sortKeysRecursive(expectedReport), sortKeysRecursive({
-    passed: true,
-    filesResult: [
-      {
-        passed: true,
-        path: path.join(entryPath, '__tests__', 'test1.spec.js'),
-        testResults: [],
+  t.deepEqual(
+    sortDeepObjectArrays(expectedReport),
+    sortDeepObjectArrays({
+      passed: true,
+      filesResult: [
+        {
+          passed: true,
+          path: path.join(entryPath, '__tests__', 'test1.spec.js'),
+          testResults: [],
+        },
+        {
+          passed: true,
+          path: path.join(entryPath, '__tests__', 'test2.spec.js'),
+          testResults: [],
+        },
+      ],
+    }),
+  )
+})
+
+test.only('assert summary structure - 2 files - only run one of them', async t => {
+  const { entryPath, cleanup } = await createFolderStrucutre({
+    entryName: 'project1',
+    content: {
+      'package.json': {
+        name: 'test-project',
+        license: 'MIT',
+        scripts: {
+          test: `${jestPath} --runInBand -t "1 test-passed!"`,
+        },
+        jest: {
+          reporters: ['default', [jestSimpleJsonReporterPath, {}]],
+        },
       },
-      {
-        passed: true,
-        path: path.join(entryPath, '__tests__', 'test2.spec.js'),
-        testResults: [],
-      },
-    ],
-  }))
+      '.npmrc': 'registry=https://registry.npmjs.org/',
+      '__tests__/test1.spec.js': `
+        describe('1', () => {
+          test('test-passed!', async () => {
+              expect(1).toEqual(1)
+            })
+        })
+                    `,
+      '__tests__/test2.spec.js': `
+        describe('2', () => {
+          test('test-failed!', async () => {
+              expect(2).toEqual(1)
+            })
+        })
+                    `,
+    },
+  })
+  t.context.cleanup = cleanup
+
+  await execa('yarn', 'test'.split(' '), {
+    cwd: entryPath,
+    reject: false,
+  })
+
+  const expectedReport: JestSimpleJsonReporter = await fse.readJSON(
+    path.join(entryPath, 'jest-simple-json-reporter-results.json'),
+  )
+  t.deepEqual(
+    sortDeepObjectArrays(expectedReport),
+    sortDeepObjectArrays({
+      passed: true,
+      filesResult: [
+        {
+          passed: true,
+          path: path.join(entryPath, '__tests__', 'test1.spec.js'),
+          testResults: [
+            {
+              didRun: true,
+              passed: true,
+              fullName: '1 test-passed!',
+            },
+          ],
+        },
+        {
+          passed: true,
+          path: path.join(entryPath, '__tests__', 'test2.spec.js'),
+          testResults: [
+            {
+              didRun: false,
+              passed: false,
+              fullName: '2 test-failed!',
+            },
+          ],
+        },
+      ],
+    }),
+  )
 })
