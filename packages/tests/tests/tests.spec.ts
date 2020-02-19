@@ -245,6 +245,51 @@ test('sepcify output-path - specify reporter without array - tests fail', async 
   t.false(reporterOutputAsJson.passed)
 })
 
+test('sepcify output-path - specify output-path with env-var - tests fail', async t => {
+  const { entryPath, cleanup } = await createFolderStrucutre({
+    entryName: 'project1',
+    content: {
+      'package.json': {
+        name: 'test-project',
+        license: 'MIT',
+        scripts: {
+          test: jestPath,
+        },
+        jest: {
+          reporters: ['default', jestSimpleJsonReporterPath],
+        },
+      },
+      '.npmrc': 'registry=https://registry.npmjs.org/',
+      'test.spec.js': `
+                  describe('1', () => {
+                    test('test-passed!', async () => {
+                        expect(1).toEqual(1)
+                      })
+                    test('test-failed!', async () => {
+                        expect(1).toEqual(2)
+                      })
+                  })
+                  `,
+    },
+  })
+  t.context.cleanup = cleanup
+
+  await execa('yarn', 'test'.split(' '), {
+    cwd: entryPath,
+    reject: false,
+    env: {
+      TEST_JSON_REPORTER_OUTPUT_PATH: './custom-path1.json',
+    },
+  })
+
+  const reporterOutput = await fse.readFile(path.join(entryPath, 'custom-path1.json'))
+  t.true(reporterOutput.includes('test-passed!'))
+  t.true(reporterOutput.includes('test-failed!'))
+
+  const reporterOutputAsJson = await fse.readJSON(path.join(entryPath, 'custom-path1.json'))
+  t.false(reporterOutputAsJson.passed)
+})
+
 test('assert summary structure - tests pass', async t => {
   const { entryPath, cleanup } = await createFolderStrucutre({
     entryName: 'project1',
@@ -473,7 +518,7 @@ test('assert summary structure - no tests in each file', async t => {
   )
 })
 
-test.only('assert summary structure - 2 files - only run one of them', async t => {
+test('assert summary structure - 2 files - only run one of them', async t => {
   const { entryPath, cleanup } = await createFolderStrucutre({
     entryName: 'project1',
     content: {
