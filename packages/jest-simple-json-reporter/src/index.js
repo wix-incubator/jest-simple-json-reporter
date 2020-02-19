@@ -4,7 +4,7 @@ const fs = require('fs')
 module.exports = class JestSimpleJsonReporter {
   constructor(globalConfig, options = {}) {
     this.outputPath =
-      options.outputPath || process.env['TEST_JSON_REPORTER_OUTPUT_PATH'] || './jest-simple-json-reporter-results.json'
+      process.env['TEST_JSON_REPORTER_OUTPUT_PATH'] || options.outputPath || './jest-simple-json-reporter-results.json'
   }
   onRunComplete(contexts, results) {
     const summary = {
