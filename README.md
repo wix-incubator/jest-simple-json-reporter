@@ -36,13 +36,43 @@ Both examples will generate `jest-simple-json-reporter-results.json` next to `pa
 
 ---
 
-Custom output path/name:
+### Options
+
+- Note: env-variables have priority over custom-options.
+
+1. Custom output path/name:
+
+```bash
+TEST_JSON_REPORTER_OUTPUT_PATH='./dir1/dir2/my-report-with-custom-name.json' jest
+```
+
+Or:
 
 ```typescript
 // (dir1 and dir2 must exist!)
 reporters: [
   'default',
   'jest-simple-json-reporter', { outputPath: './dir1/dir2/my-report-with-custom-name.json' }],
+]
+```
+
+2. relative/abs paths in report-output:
+
+by default, each test-file-path that is included in the report, will be absolute path. if you want to change to relative path (based on cwd of where you run `jest`):
+
+- the result will include `./` as prefix in each path. path-result-example: `./__tests__/test1.spec.js`.
+
+```bash
+TEST_JSON_REPORTER_USE_RELATIVE_PATHS=true jest
+```
+
+Or:
+
+```typescript
+// (dir1 and dir2 must exist!)
+reporters: [
+  'default',
+  'jest-simple-json-reporter', { useRelativePaths: true }],
 ]
 ```
 

@@ -301,7 +301,7 @@ test('assert summary structure - tests pass', async t => {
           test: `${jestPath} --runInBand`,
         },
         jest: {
-          reporters: ['default', [jestSimpleJsonReporterPath, {}]],
+          reporters: ['default', [jestSimpleJsonReporterPath, { useRelativePaths: true }]],
         },
       },
       '.npmrc': 'registry=https://registry.npmjs.org/',
@@ -343,7 +343,7 @@ test('assert summary structure - tests pass', async t => {
       filesResult: [
         {
           passed: true,
-          path: path.join(entryPath, '__tests__', 'test1.spec.js'),
+          path: `./${path.join('__tests__', 'test1.spec.js')}`,
           testResults: [
             {
               didRun: true,
@@ -359,7 +359,7 @@ test('assert summary structure - tests pass', async t => {
         },
         {
           passed: true,
-          path: path.join(entryPath, '__tests__', 'test2.spec.js'),
+          path: `./${path.join('__tests__', 'test2.spec.js')}`,
           testResults: [
             {
               didRun: true,
@@ -420,6 +420,9 @@ test('assert summary structure - some tests fail', async t => {
   await execa('yarn', 'test'.split(' '), {
     cwd: entryPath,
     reject: false,
+    env: {
+      TEST_JSON_REPORTER_USE_RELATIVE_PATHS: 'true',
+    },
   })
 
   const expectedReport: JestSimpleJsonReporter = await fse.readJSON(
@@ -432,7 +435,7 @@ test('assert summary structure - some tests fail', async t => {
       filesResult: [
         {
           passed: true,
-          path: path.join(entryPath, '__tests__', 'test1.spec.js'),
+          path: `./${path.join('__tests__', 'test1.spec.js')}`,
           testResults: [
             {
               didRun: true,
@@ -448,7 +451,7 @@ test('assert summary structure - some tests fail', async t => {
         },
         {
           passed: false,
-          path: path.join(entryPath, '__tests__', 'test2.spec.js'),
+          path: `./${path.join('__tests__', 'test2.spec.js')}`,
           testResults: [
             {
               didRun: true,
@@ -529,7 +532,7 @@ test('assert summary structure - 2 files - only run one of them', async t => {
           test: `${jestPath} --runInBand -t "1 test-passed!"`,
         },
         jest: {
-          reporters: ['default', [jestSimpleJsonReporterPath, {}]],
+          reporters: ['default', [jestSimpleJsonReporterPath, { useRelativePaths: true }]],
         },
       },
       '.npmrc': 'registry=https://registry.npmjs.org/',
@@ -566,7 +569,7 @@ test('assert summary structure - 2 files - only run one of them', async t => {
       filesResult: [
         {
           passed: true,
-          path: path.join(entryPath, '__tests__', 'test1.spec.js'),
+          path: `./${path.join('__tests__', 'test1.spec.js')}`,
           testResults: [
             {
               didRun: true,
@@ -577,7 +580,7 @@ test('assert summary structure - 2 files - only run one of them', async t => {
         },
         {
           passed: true,
-          path: path.join(entryPath, '__tests__', 'test2.spec.js'),
+          path: `./${path.join('.', '__tests__', 'test2.spec.js')}`,
           testResults: [
             {
               didRun: false,
