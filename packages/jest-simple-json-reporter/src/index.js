@@ -5,8 +5,8 @@ module.exports = class JestSimpleJsonReporter {
   constructor(globalConfig, options = {}) {
     this.outputPath =
       process.env['TEST_JSON_REPORTER_OUTPUT_PATH'] || options.outputPath || './jest-simple-json-reporter-results.json'
-    this.useRelativePaths =
-      process.env['TEST_JSON_REPORTER_USE_RELATIVE_PATHS'] === 'true' || options.useRelativePaths || false
+    this.useAbsolutePaths =
+      process.env['TEST_JSON_REPORTER_USE_ABSOLUTE_PATHS'] === 'true' || options.useAbsolutePaths || false
   }
   onRunComplete(contexts, results) {
     const summary = {
@@ -14,7 +14,7 @@ module.exports = class JestSimpleJsonReporter {
         .map(fileResult => {
           const testFilePath = fs.realpathSync(fileResult.testFilePath)
           return {
-            path: this.useRelativePaths ? testFilePath.replace(`${process.cwd()}`, '.') : testFilePath,
+            path: this.useAbsolutePaths ? testFilePath : testFilePath.replace(`${process.cwd()}`, '.'),
             testResults: (fileResult.testResults || []).map(testResult => ({
               didRun: testResult.status === 'failed' || testResult.status === 'passed',
               passed: testResult.status === 'passed',

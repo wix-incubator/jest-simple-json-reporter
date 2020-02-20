@@ -58,12 +58,13 @@ reporters: [
 
 2. relative/abs paths in report-output:
 
-by default, each test-file-path that is included in the report, will be absolute path. if you want to change to relative path (based on cwd of where you run `jest`):
+by default, each test-file-path that is included in the report, will be relative path (based on cwd of where you run `jest`). if you want to change to absolute path:
 
-- the result will include `./` as prefix in each path. path-result-example: `./__tests__/test1.spec.js`.
+- the relative-path will include `./` as prefix in each path. relative-path-result-example: `./__tests__/test1.spec.js`.
+- symlinks in the absulote paths will be replaced with their real-path on your file-system.
 
 ```bash
-TEST_JSON_REPORTER_USE_RELATIVE_PATHS=true jest
+TEST_JSON_REPORTER_USE_ABSOLUTE_PATHS=true jest
 ```
 
 Or:
@@ -72,7 +73,7 @@ Or:
 // (dir1 and dir2 must exist!)
 reporters: [
   'default',
-  'jest-simple-json-reporter', { useRelativePaths: true }],
+  'jest-simple-json-reporter', { useAbsolutePaths: true }],
 ]
 ```
 

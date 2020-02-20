@@ -301,7 +301,7 @@ test('assert summary structure - tests pass', async t => {
           test: `${jestPath} --runInBand`,
         },
         jest: {
-          reporters: ['default', [jestSimpleJsonReporterPath, { useRelativePaths: true }]],
+          reporters: ['default', [jestSimpleJsonReporterPath, { useAbsolutePaths: false }]],
         },
       },
       '.npmrc': 'registry=https://registry.npmjs.org/',
@@ -481,7 +481,7 @@ test('assert summary structure - no tests in each file', async t => {
           test: `${jestPath} --runInBand`,
         },
         jest: {
-          reporters: ['default', [jestSimpleJsonReporterPath, {}]],
+          reporters: ['default', [jestSimpleJsonReporterPath, { useAbsolutePaths: true }]],
         },
       },
       '.npmrc': 'registry=https://registry.npmjs.org/',
@@ -532,7 +532,7 @@ test('assert summary structure - 2 files - only run one of them', async t => {
           test: `${jestPath} --runInBand -t "1 test-passed!"`,
         },
         jest: {
-          reporters: ['default', [jestSimpleJsonReporterPath, { useRelativePaths: true }]],
+          reporters: ['default', jestSimpleJsonReporterPath],
         },
       },
       '.npmrc': 'registry=https://registry.npmjs.org/',
