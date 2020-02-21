@@ -8,6 +8,7 @@ module.exports = class JestSimpleJsonReporter {
     this.useAbsolutePaths =
       process.env['TEST_JSON_REPORTER_USE_ABSOLUTE_PATHS'] === 'true' || options.useAbsolutePaths || false
   }
+
   onRunComplete(contexts, results) {
     const summary = {
       filesResult: (results.testResults || [])

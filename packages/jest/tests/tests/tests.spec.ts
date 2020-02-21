@@ -1,18 +1,16 @@
+import deepSort from '@wix/deep-sort'
 import testWithTypedContext, { TestInterface } from 'ava'
 import createFolderStrucutre from 'create-folder-structure'
 import * as execa from 'execa'
 import * as fse from 'fs-extra'
 import * as path from 'path'
-import * as fs from 'fs'
-import {JsonReporter} from 'test-json-reporter-api'
-import * as resolveBin from 'resolve-bin'
-import {promisify} from 'util'
-import deepSort from '@wix/deep-sort'
+import { JsonReporter } from '@wix/test-json-reporter-api'
+import { promisify } from 'util'
 
-const resolveBinPromise = promisify<string,string>(resolveBin)
+const resolveBinPromise = promisify<string, string>(require('resolve-bin'))
 
 export type TestContext = {
-  cleanup: () => Promise<void>,
+  cleanup: () => Promise<void>
   jestPath: string
 }
 
@@ -43,7 +41,6 @@ test('dont specify output-path and use the default - run reporter on project wit
           reporters: ['default', [jestSimpleJsonReporterPath, {}]],
         },
       },
-      '.npmrc': 'registry=https://registry.npmjs.org/',
       '__tests__/test.spec.js': `
                   describe('1', () => {
                     test('test-passed1!', async () => {
