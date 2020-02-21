@@ -4,37 +4,29 @@ import * as execa from 'execa'
 import * as fse from 'fs-extra'
 import * as path from 'path'
 import * as fs from 'fs'
+import {JsonReporter} from 'test-json-reporter-api'
+import * as resolveBin from 'resolve-bin'
+import {promisify} from 'util'
+import deepSort from '@wix/deep-sort'
 
-const sortDeepObjectArrays = require('sort-deep-object-arrays')
+const resolveBinPromise = promisify<string,string>(resolveBin)
 
 export type TestContext = {
-  cleanup: () => Promise<void>
+  cleanup: () => Promise<void>,
+  jestPath: string
 }
 
 const test = testWithTypedContext as TestInterface<TestContext>
 
-type JestSimpleJsonReporter = {
-  passed: boolean
-  filesResult: {
-    passed: boolean
-    path: string
-    testResults: {
-      didRun: boolean
-      passed: boolean
-      fullName: string
-    }[]
-  }[]
-}
-
-test.before(t => {
+test.before(async t => {
   t.timeout(100000)
+  t.context.jestPath = await resolveBinPromise('jest')
 })
 
 test.afterEach(async t => {
   await t.context.cleanup()
 })
 
-const jestPath = path.join(__dirname, '..', '..', '..', 'node_modules', '.bin', 'jest') // to avoid installing jest in every project. takes too much time
 const jestSimpleJsonReporterPath = require.resolve('jest-simple-json-reporter')
 
 test('dont specify output-path and use the default - run reporter on project with tests that passes', async t => {
@@ -45,7 +37,7 @@ test('dont specify output-path and use the default - run reporter on project wit
         name: 'test-project',
         license: 'MIT',
         scripts: {
-          test: jestPath,
+          test: t.context.jestPath,
         },
         jest: {
           reporters: ['default', [jestSimpleJsonReporterPath, {}]],
@@ -86,7 +78,7 @@ test('dont specify output-path and use the default - run reporter on project wit
         name: 'test-project',
         license: 'MIT',
         scripts: {
-          test: jestPath,
+          test: t.context.jestPath,
         },
         jest: {
           reporters: ['default', [jestSimpleJsonReporterPath, {}]],
@@ -128,7 +120,7 @@ test('dont specify output-path and use the default - specify reporter without ar
         name: 'test-project',
         license: 'MIT',
         scripts: {
-          test: jestPath,
+          test: t.context.jestPath,
         },
         jest: {
           reporters: [[jestSimpleJsonReporterPath, {}]],
@@ -169,7 +161,7 @@ test('sepcify output-path - specify reporter without array - tests pass', async 
         name: 'test-project',
         license: 'MIT',
         scripts: {
-          test: jestPath,
+          test: t.context.jestPath,
         },
         jest: {
           reporters: ['default', [jestSimpleJsonReporterPath, { outputPath: './custom-path.json' }]],
@@ -211,7 +203,7 @@ test('sepcify output-path - specify reporter without array - tests fail', async 
         name: 'test-project',
         license: 'MIT',
         scripts: {
-          test: jestPath,
+          test: t.context.jestPath,
         },
         jest: {
           reporters: [[jestSimpleJsonReporterPath, { outputPath: './custom-path.json' }]],
@@ -253,7 +245,7 @@ test('sepcify output-path - specify output-path with env-var - tests fail', asyn
         name: 'test-project',
         license: 'MIT',
         scripts: {
-          test: jestPath,
+          test: t.context.jestPath,
         },
         jest: {
           reporters: ['default', jestSimpleJsonReporterPath],
@@ -298,7 +290,7 @@ test('assert summary structure - tests pass', async t => {
         name: 'test-project',
         license: 'MIT',
         scripts: {
-          test: `${jestPath} --runInBand`,
+          test: `${t.context.jestPath} --runInBand`,
         },
         jest: {
           reporters: ['default', [jestSimpleJsonReporterPath, { useAbsolutePaths: false }]],
@@ -333,12 +325,12 @@ test('assert summary structure - tests pass', async t => {
     cwd: entryPath,
   })
 
-  const expectedReport: JestSimpleJsonReporter = await fse.readJSON(
+  const expectedReport: JsonReporter = await fse.readJSON(
     path.join(entryPath, 'jest-simple-json-reporter-results.json'),
   )
   t.deepEqual(
-    sortDeepObjectArrays(expectedReport),
-    sortDeepObjectArrays({
+    deepSort(expectedReport),
+    deepSort({
       passed: true,
       filesResult: [
         {
@@ -386,7 +378,7 @@ test('assert summary structure - some tests fail', async t => {
         name: 'test-project',
         license: 'MIT',
         scripts: {
-          test: `${jestPath} --runInBand`,
+          test: `${t.context.jestPath} --runInBand`,
         },
         jest: {
           reporters: ['default', [jestSimpleJsonReporterPath, {}]],
@@ -425,12 +417,12 @@ test('assert summary structure - some tests fail', async t => {
     },
   })
 
-  const expectedReport: JestSimpleJsonReporter = await fse.readJSON(
+  const expectedReport: JsonReporter = await fse.readJSON(
     path.join(entryPath, 'jest-simple-json-reporter-results.json'),
   )
   t.deepEqual(
-    sortDeepObjectArrays(expectedReport),
-    sortDeepObjectArrays({
+    deepSort(expectedReport),
+    deepSort({
       passed: false,
       filesResult: [
         {
@@ -478,7 +470,7 @@ test('assert summary structure - no tests in each file', async t => {
         name: 'test-project',
         license: 'MIT',
         scripts: {
-          test: `${jestPath} --runInBand`,
+          test: `${t.context.jestPath} --runInBand`,
         },
         jest: {
           reporters: ['default', [jestSimpleJsonReporterPath, { useAbsolutePaths: true }]],
@@ -498,12 +490,12 @@ test('assert summary structure - no tests in each file', async t => {
     reject: false,
   })
 
-  const expectedReport: JestSimpleJsonReporter = await fse.readJSON(
+  const expectedReport: JsonReporter = await fse.readJSON(
     path.join(entryPath, 'jest-simple-json-reporter-results.json'),
   )
   t.deepEqual(
-    sortDeepObjectArrays(expectedReport),
-    sortDeepObjectArrays({
+    deepSort(expectedReport),
+    deepSort({
       passed: true,
       filesResult: [
         {
@@ -529,7 +521,7 @@ test('assert summary structure - 2 files - only run one of them', async t => {
         name: 'test-project',
         license: 'MIT',
         scripts: {
-          test: `${jestPath} --runInBand -t "1 test-passed!"`,
+          test: `${t.context.jestPath} --runInBand -t "1 test-passed!"`,
         },
         jest: {
           reporters: ['default', jestSimpleJsonReporterPath],
@@ -559,12 +551,12 @@ test('assert summary structure - 2 files - only run one of them', async t => {
     reject: false,
   })
 
-  const expectedReport: JestSimpleJsonReporter = await fse.readJSON(
+  const expectedReport: JsonReporter = await fse.readJSON(
     path.join(entryPath, 'jest-simple-json-reporter-results.json'),
   )
   t.deepEqual(
-    sortDeepObjectArrays(expectedReport),
-    sortDeepObjectArrays({
+    deepSort(expectedReport),
+    deepSort({
       passed: true,
       filesResult: [
         {

@@ -1,0 +1,11 @@
+{
+  "name": "jest-tests",
+  "version": "1.0.0",
+  "author": "stavalfi <stava@wix.com>",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "jest-simple-json-reporter": "^1.0.0",
+    "@wix/deep-sort":"^1.0.0"
+  }
+}

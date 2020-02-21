@@ -1,0 +1,22 @@
+{
+  "name": "@wix/deep-sort",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "author": "stavalfi <stava@wix.com>",
+  "license": "MIT",
+  "private": false,
+  "repository": {
+    "url": "https://github.com/wix-incubator/jest-simple-json-reporter"
+  },
+  "publishConfig": {
+    "registry": "http://npm.dev.wixpress.com/",
+    "versionBumpStrategy": "patch"
+  },
+  "dependencies": {
+    "object-hash": "^2.0.2"
+  },
+  "files": [
+    "src",
+    "README.md"
+  ]
+}

@@ -9,7 +9,7 @@
     "url": "https://github.com/wix-incubator/jest-simple-json-reporter"
   },
   "workspaces": [
-    "packages/*"
+    "packages/**/*"
   ],
   "scripts": {
     "test": "yarn ava --verbose",
@@ -24,11 +24,13 @@
     "create-folder-structure": "^3.0.0",
     "execa": "^4.0.0",
     "is-directory": "^0.3.1",
+    "jasmine": "^3.5.0",
     "jest": "^25.1.0",
     "jest-html-reporter": "^2.8.0",
     "lerna": "^3.20.2",
     "path-exists": "^4.0.0",
     "prettier": "^1.19.1",
+    "resolve-bin": "^0.4.0",
     "sort-deep-object-arrays": "^1.1.2",
     "ts-node": "^8.6.2",
     "typescript": "^3.7.5"
@@ -36,7 +38,7 @@
   "ava": {
     "compileEnhancements": false,
     "files": [
-      "packages/tests/tests/**/*.spec.ts"
+      "packages**/*/tests/tests/**/*.spec.ts"
     ],
     "extensions": [
       "ts"

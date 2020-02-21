@@ -1,0 +1,22 @@
+{
+  "name": "jasmine-simple-json-reporter",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "author": "stavalfi <stava@wix.com>",
+  "license": "MIT",
+  "private": false,
+  "repository": {
+    "url": "https://github.com/wix-incubator/jest-simple-json-reporter"
+  },
+  "publishConfig": {
+    "registry": "http://npm.dev.wixpress.com/",
+    "versionBumpStrategy": "patch"
+  },
+  "dependencies": {
+    "fs-extra": "^8.1.0"
+  },
+  "files": [
+    "src",
+    "README.md"
+  ]
+}
