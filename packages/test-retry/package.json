@@ -1,0 +1,38 @@
+{
+  "name": "test-retry",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "bin": {
+    "test-retry": "./dist/index.js"
+  },
+  "private": false,
+  "repository": {
+    "url": "https://github.com/wix-incubator/jest-simple-json-reporter/"
+  },
+  "publishConfig": {
+    "registry": "http://npm.dev.wixpress.com/",
+    "versionBumpStrategy": "patch"
+  },
+  "files": [
+    "src",
+    "dist"
+  ],
+  "license": "ISC",
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build": "yarn clean && yarn tsc && chmod u+x ./dist/index.js"
+  },
+  "dependencies": {
+    "execa": "4.0.0",
+    "fs-extra": "8.1.0",
+    "to-regex": "3.0.2",
+    "is-ci": "2.0.0",
+    "chance": "1.1.4",
+    "aws-sdk": "2.622.0",
+    "@jsbits/escape-regex-str": "1.0.3"
+  },
+  "devDependencies": {
+    "jest-simple-json-reporter": "^1.0.0",
+    "@wix/test-json-reporter-api":"^1.0.0"
+  }
+}

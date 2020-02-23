@@ -13,6 +13,7 @@
   ],
   "scripts": {
     "test": "yarn ava --verbose",
+    "build":"lerna run build",
     "prettier": "yarn pretty-quick"
   },
   "devDependencies": {
@@ -41,12 +42,27 @@
     "resolve-bin": "^0.4.0",
     "sort-deep-object-arrays": "^1.1.2",
     "ts-node": "^8.6.2",
-    "typescript": "^3.7.5"
+    "typescript": "^3.7.5",
+    "pkg-up": "3.1.0",
+    "@babel/core": "^7.8.4",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-proposal-decorators": "^7.8.3",
+    "@babel/preset-env": "^7.8.4",
+    "sled-test-runner": "^1.0.374",
+    "@types/jest": "25.1.2",
+    "@types/jest-image-snapshot": "2.11.1",
+    "ts-jest": "^24.3.0",
+    "@types/yargs": "15.0.3",
+    "pretty-quick": "2.0.1",
+    "@types/chance": "1.0.0",
+    "@types/is-ci": "2.0.0",
+    "s3rver": "3.5.0",
+    "@types/escape-string-regexp": "2.0.1"
   },
   "ava": {
     "compileEnhancements": false,
     "files": [
-      "packages**/*/tests/tests/**/*.spec.ts"
+      "packages/**/*/tests/**/*.spec.ts"
     ],
     "extensions": [
       "ts"
