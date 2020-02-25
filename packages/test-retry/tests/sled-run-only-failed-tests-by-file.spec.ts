@@ -12,7 +12,7 @@ s3BeforeAfterEach(test)
 
 binBeforeAfterEach(test)
 
-test('one test fail in first run and then pass in second run', async t => {
+test.skip('one test fail in first run and then pass in second run', async t => {
   const generateProject = async () => {
     const result = await createFolderStrucutre({
       entryName: 'project1',
@@ -21,7 +21,7 @@ test('one test fail in first run and then pass in second run', async t => {
           name: 'test-project',
           license: 'MIT',
           scripts: {
-            test: `${t.context.bin.testRetryPath} --test-runner sled -- ${t.context.bin.sledPath} local`,
+            test: `${t.context.bin.testRetryPath} --test-runner sled -- ${t.context.bin.sledPath} remote`,
           },
         },
         'pom.xml': `
@@ -44,28 +44,6 @@ test('one test fail in first run and then pass in second run', async t => {
         'sled/test1.spec.js': `
                           describe('1', () => {
                             test('1.1', async () => {
-                                if (process.env['TEST_1_PASS'] === 'true') {
-                                    expect(1).toEqual(1)
-                                  } else {
-                                    expect(1).toEqual(2)
-                                  }
-                              })
-                          })
-                          `,
-        'sled/test2.spec.js': `
-                          describe('2', () => {
-                            test('2.1', async () => {
-                                if (process.env['TEST_1_PASS'] === 'true') {
-                                    expect(1).toEqual(1)
-                                  } else {
-                                    expect(1).toEqual(2)
-                                  }
-                              })
-                          })
-                          `,
-        'sled/test3.spec.js': `
-                          describe('3', () => {
-                            test('3.1', async () => {
                                 if (process.env['TEST_1_PASS'] === 'true') {
                                     expect(1).toEqual(1)
                                   } else {
@@ -97,8 +75,9 @@ test('one test fail in first run and then pass in second run', async t => {
       NPM_CI_AWS_S3_ADDRESS: t.context.s3.s3Address,
     },
     stdio: 'inherit',
+    reject: false,
   })
-  t.deepEqual(result1.exitCode, 0)
+  t.deepEqual(result1.exitCode, 1)
 
   const project2 = await generateProject()
   const result2 = await execa.command('yarn test', {

@@ -11234,10 +11234,10 @@ sled-config@^2.0.0:
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/sled-config/-/sled-config-2.0.25.tgz#3b797e3289fb9bc134859d7a862b5941f205184e"
   integrity sha1-O3l+Mon7m8E0hZ16hitZQfIFGE4=
 
-sled-test-runner@^1.0.374:
-  version "1.0.378"
-  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/sled-test-runner/-/sled-test-runner-1.0.378.tgz#0b7be13eacb3f589432a2a67eb8c679105a8017b"
-  integrity sha1-C3vhPqyz9YlDKipn64xnkQWoAXs=
+sled-test-runner@^1.0.380:
+  version "1.0.380"
+  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/sled-test-runner/-/sled-test-runner-1.0.380.tgz#896fa819383887c207cf6b4b404cf55686128a4f"
+  integrity sha1-iW+oGTg4h8IHz2tLQEz1VoYSik8=
   dependencies:
     "@babel/plugin-proposal-class-properties" "^7.1.0"
     "@babel/plugin-proposal-decorators" "^7.8.3"

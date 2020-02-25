@@ -26,3 +26,5 @@ export type Options = {
   reportPath: string
   testRunner: TestRunner
 }
+
+export type S3Options = { bucket: string; key: string }
