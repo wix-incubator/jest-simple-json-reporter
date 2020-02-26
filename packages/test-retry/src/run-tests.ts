@@ -35,6 +35,7 @@ function overridedUserCommand({
     }
     case TestRunner.sled: {
       const env = {
+        KEEP_PATH_AS_IS: 'true',
         ENABLE_JSON_REPORTER: 'true',
       }
       if (!report) {
@@ -47,7 +48,7 @@ function overridedUserCommand({
         .filter(fileResult => !fileResult.passed)
         .map(fileResult => fileResult.path)
       return {
-        command: `${userTestCommand} -f "${failedTestFiles.join(' ')}"`,
+        command: `${userTestCommand} -f "${failedTestFiles.join('|')}"`,
         env,
       }
     }
