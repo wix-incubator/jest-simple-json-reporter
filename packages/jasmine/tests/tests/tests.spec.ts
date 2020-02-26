@@ -3,9 +3,10 @@ import * as execa from 'execa'
 import * as fse from 'fs-extra'
 import * as path from 'path'
 import { promisify } from 'util'
-import { generateProject, jasmineModulePath, jasmineReporterModulePath, jasmineSimpleJsonReporterPath } from './utils'
+import { jasmineModulePath, jasmineReporterModulePath, jasmineSimpleJsonReporterPath } from './utils'
 import { JsonReporter } from '@wix/test-json-reporter-api'
 import deepSort from '@wix/deep-sort'
+import createFolderStrucutre from 'create-folder-structure'
 
 const resolveBinPromise = promisify<string, string>(require('resolve-bin'))
 
@@ -26,27 +27,37 @@ test.afterEach(async t => {
 })
 
 test('project with single test that passes', async t => {
-  const { entryPath, cleanup } = await generateProject({
-    'jasmine.js': `
-    const Jasmine = require('${jasmineModulePath}');
-    const jasmine = new Jasmine();
-    jasmine.loadConfig({
-      spec_dir: 'spec',
-      spec_files: ['**/*.spec.js'],
-    });
-    const JasmineConsoleReporter = require("${jasmineReporterModulePath}");
-    jasmine.addReporter(new JasmineConsoleReporter());
-    jasmine.addReporter(require("${jasmineSimpleJsonReporterPath}")());
-    jasmine.execute();
-  `,
-    'spec/test1.spec.js': `
-                  describe('1', () => {
-                    it('1.1', () => {
-                      console.log("stav1")
-                        expect(1).toBe(1)
-                      })
-                  })
-                  `,
+  const { entryPath, cleanup } = await createFolderStrucutre({
+    entryName: 'project1',
+    content: {
+      'package.json': {
+        name: 'test-project',
+        license: 'MIT',
+        scripts: {
+          test: `node jasmine.js`,
+        },
+      },
+      'jasmine.js': `
+      const Jasmine = require('${jasmineModulePath}');
+      const jasmine = new Jasmine();
+      jasmine.loadConfig({
+        spec_dir: 'spec',
+        spec_files: ['**/*.spec.js'],
+      });
+      const JasmineConsoleReporter = require("${jasmineReporterModulePath}");
+      jasmine.addReporter(new JasmineConsoleReporter());
+      jasmine.addReporter(require("${jasmineSimpleJsonReporterPath}")());
+      jasmine.execute();
+    `,
+      'spec/test1.spec.js': `
+                    describe('1', () => {
+                      it('1.1', () => {
+                        console.log("stav1")
+                          expect(1).toBe(1)
+                        })
+                    })
+                    `,
+    },
   })
   t.context.cleanup = cleanup
 
@@ -80,8 +91,17 @@ test('project with single test that passes', async t => {
 })
 
 test('options - custom output by env-var', async t => {
-  const { entryPath, cleanup } = await generateProject({
-    'jasmine.js': `
+  const { entryPath, cleanup } = await createFolderStrucutre({
+    entryName: 'project1',
+    content: {
+      'package.json': {
+        name: 'test-project',
+        license: 'MIT',
+        scripts: {
+          test: `node jasmine.js`,
+        },
+      },
+      'jasmine.js': `
     const Jasmine = require('${jasmineModulePath}');
     const jasmine = new Jasmine();
     jasmine.loadConfig({
@@ -93,7 +113,7 @@ test('options - custom output by env-var', async t => {
     jasmine.addReporter(require("${jasmineSimpleJsonReporterPath}")());
     jasmine.execute();
   `,
-    'spec/test1.spec.js': `
+      'spec/test1.spec.js': `
                   describe('1', () => {
                     it('1.1', () => {
                       console.log("stav1")
@@ -101,6 +121,7 @@ test('options - custom output by env-var', async t => {
                       })
                   })
                   `,
+    },
   })
   t.context.cleanup = cleanup
 
@@ -137,8 +158,17 @@ test('options - custom output by env-var', async t => {
 })
 
 test('options - custom output by options.outputPath', async t => {
-  const { entryPath, cleanup } = await generateProject({
-    'jasmine.js': `
+  const { entryPath, cleanup } = await createFolderStrucutre({
+    entryName: 'project1',
+    content: {
+      'package.json': {
+        name: 'test-project',
+        license: 'MIT',
+        scripts: {
+          test: `node jasmine.js`,
+        },
+      },
+      'jasmine.js': `
     const Jasmine = require('${jasmineModulePath}');
     const jasmine = new Jasmine();
     jasmine.loadConfig({
@@ -150,7 +180,7 @@ test('options - custom output by options.outputPath', async t => {
     jasmine.addReporter(require("${jasmineSimpleJsonReporterPath}")({outputPath:"./output.json"}));
     jasmine.execute();
   `,
-    'spec/test1.spec.js': `
+      'spec/test1.spec.js': `
                   describe('1', () => {
                     it('1.1', () => {
                       console.log("stav1")
@@ -158,6 +188,7 @@ test('options - custom output by options.outputPath', async t => {
                       })
                   })
                   `,
+    },
   })
   t.context.cleanup = cleanup
 
@@ -191,8 +222,17 @@ test('options - custom output by options.outputPath', async t => {
 })
 
 test('project with single test that is skipped', async t => {
-  const { entryPath, cleanup } = await generateProject({
-    'jasmine.js': `
+  const { entryPath, cleanup } = await createFolderStrucutre({
+    entryName: 'project1',
+    content: {
+      'package.json': {
+        name: 'test-project',
+        license: 'MIT',
+        scripts: {
+          test: `node jasmine.js`,
+        },
+      },
+      'jasmine.js': `
     const Jasmine = require('${jasmineModulePath}');
     const jasmine = new Jasmine();
     jasmine.loadConfig({
@@ -204,7 +244,7 @@ test('project with single test that is skipped', async t => {
     jasmine.addReporter(require("${jasmineSimpleJsonReporterPath}")());
     jasmine.execute();
   `,
-    'spec/test1.spec.js': `
+      'spec/test1.spec.js': `
                   xdescribe('1', () => {
                     it('1.1', () => {
                       console.log("stav1")
@@ -212,6 +252,7 @@ test('project with single test that is skipped', async t => {
                       })
                   })
                   `,
+    },
   })
   t.context.cleanup = cleanup
 
@@ -246,8 +287,17 @@ test('project with single test that is skipped', async t => {
 })
 
 test('project with multiple test files with multiple tests that all pass', async t => {
-  const { entryPath, cleanup } = await generateProject({
-    'jasmine.js': `
+  const { entryPath, cleanup } = await createFolderStrucutre({
+    entryName: 'project1',
+    content: {
+      'package.json': {
+        name: 'test-project',
+        license: 'MIT',
+        scripts: {
+          test: `node jasmine.js`,
+        },
+      },
+      'jasmine.js': `
     const Jasmine = require('${jasmineModulePath}');
     const jasmine = new Jasmine();
     jasmine.loadConfig({
@@ -259,7 +309,7 @@ test('project with multiple test files with multiple tests that all pass', async
     jasmine.addReporter(require("${jasmineSimpleJsonReporterPath}")());
     jasmine.execute();
   `,
-    'spec/test1.spec.js': `
+      'spec/test1.spec.js': `
   describe('1', () => {
     it('1.1', () => {
       console.log("stav1")
@@ -271,7 +321,7 @@ test('project with multiple test files with multiple tests that all pass', async
         })
   })
                 `,
-    'spec/test2.spec.js': `
+      'spec/test2.spec.js': `
                 describe('2', () => {
                   it('2.1', () => {
                     console.log("stav1")
@@ -283,6 +333,7 @@ test('project with multiple test files with multiple tests that all pass', async
                       })
                 })
                               `,
+    },
   })
   t.context.cleanup = cleanup
 
@@ -349,8 +400,17 @@ test('project with multiple test files with multiple tests that all pass', async
 })
 
 test('project with multiple test files with multiple tests that some fail', async t => {
-  const { entryPath, cleanup } = await generateProject({
-    'jasmine.js': `
+  const { entryPath, cleanup } = await createFolderStrucutre({
+    entryName: 'project1',
+    content: {
+      'package.json': {
+        name: 'test-project',
+        license: 'MIT',
+        scripts: {
+          test: `node jasmine.js`,
+        },
+      },
+      'jasmine.js': `
     const Jasmine = require('${jasmineModulePath}');
     const jasmine = new Jasmine();
     jasmine.loadConfig({
@@ -362,7 +422,7 @@ test('project with multiple test files with multiple tests that some fail', asyn
     jasmine.addReporter(require("${jasmineSimpleJsonReporterPath}")());
     jasmine.execute();
   `,
-    'spec/test1.spec.js': `
+      'spec/test1.spec.js': `
   describe('1', () => {
     it('1.1', () => {
       console.log("stav1")
@@ -374,7 +434,7 @@ test('project with multiple test files with multiple tests that some fail', asyn
         })
   })
                 `,
-    'spec/test2.spec.js': `
+      'spec/test2.spec.js': `
                 describe('2', () => {
                   it('2.1', () => {
                     console.log("stav1")
@@ -386,6 +446,7 @@ test('project with multiple test files with multiple tests that some fail', asyn
                       })
                 })
                               `,
+    },
   })
   t.context.cleanup = cleanup
 
@@ -453,8 +514,17 @@ test('project with multiple test files with multiple tests that some fail', asyn
 })
 
 test('project with multiple test files with multiple tests that some fail and some skipped', async t => {
-  const { entryPath, cleanup } = await generateProject({
-    'jasmine.js': `
+  const { entryPath, cleanup } = await createFolderStrucutre({
+    entryName: 'project1',
+    content: {
+      'package.json': {
+        name: 'test-project',
+        license: 'MIT',
+        scripts: {
+          test: `node jasmine.js`,
+        },
+      },
+      'jasmine.js': `
     const Jasmine = require('${jasmineModulePath}');
     const jasmine = new Jasmine();
     jasmine.loadConfig({
@@ -466,7 +536,7 @@ test('project with multiple test files with multiple tests that some fail and so
     jasmine.addReporter(require("${jasmineSimpleJsonReporterPath}")());
     jasmine.execute();
   `,
-    'spec/test1.spec.js': `
+      'spec/test1.spec.js': `
   describe('1', () => {
     it('1.1', () => {
       console.log("stav1")
@@ -478,7 +548,7 @@ test('project with multiple test files with multiple tests that some fail and so
         })
   })
                 `,
-    'spec/test2.spec.js': `
+      'spec/test2.spec.js': `
                 describe('2', () => {
                   it('2.1', () => {
                     console.log("stav1")
@@ -490,6 +560,7 @@ test('project with multiple test files with multiple tests that some fail and so
                       })
                 })
                               `,
+    },
   })
   t.context.cleanup = cleanup
 
