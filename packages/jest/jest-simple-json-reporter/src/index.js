@@ -1,8 +1,11 @@
 const fse = require('fs-extra')
 const fs = require('fs')
 
-function calculatePath(cwd, testFilePath, { useAbsolutePaths }) {
+function calculatePath(cwd, testFilePath, { useAbsolutePaths, keepPathAsIs }) {
   try {
+    if (keepPathAsIs) {
+      return testFilePath
+    }
     const realTestFilePath = fs.realpathSync(testFilePath)
     return useAbsolutePaths ? realTestFilePath : realTestFilePath.replace(`${cwd}`, '.')
   } catch (e) {
@@ -16,6 +19,7 @@ module.exports = class JestSimpleJsonReporter {
       process.env['TEST_JSON_REPORTER_OUTPUT_PATH'] || options.outputPath || './jest-simple-json-reporter-results.json'
     this.useAbsolutePaths =
       process.env['TEST_JSON_REPORTER_USE_ABSOLUTE_PATHS'] === 'true' || options.useAbsolutePaths || false
+    this.keepPathAsIs = process.env['KEEP_PATH_AS_IS']
   }
 
   onRunComplete(contexts, results) {

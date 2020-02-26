@@ -77,6 +77,8 @@ reporters: [
 ]
 ```
 
+3. `KEEP_PATH_AS_IS=true` - specific when using with sled. sled provides to the reporter an invalid relative path to the test-file and I must save it as is.
+
 ---
 
 Types:

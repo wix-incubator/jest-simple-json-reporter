@@ -510,6 +510,60 @@ test('assert summary structure - no tests in each file', async t => {
   )
 })
 
+test('assert summary structure - no tests in each file - KEEP_PATH_AS_IS=true', async t => {
+  const { entryPath, cleanup } = await createFolderStrucutre({
+    entryName: 'project1',
+    content: {
+      'package.json': {
+        name: 'test-project',
+        license: 'MIT',
+        scripts: {
+          test: `${t.context.jestPath} --runInBand`,
+        },
+        jest: {
+          reporters: ['default', jestSimpleJsonReporterPath],
+        },
+      },
+      '.npmrc': 'registry=https://registry.npmjs.org/',
+      '__tests__/test1.spec.js': `
+                  `,
+      '__tests__/test2.spec.js': `
+                  `,
+    },
+  })
+  t.context.cleanup = cleanup
+
+  await execa('yarn', 'test'.split(' '), {
+    cwd: entryPath,
+    reject: false,
+    env: {
+      KEEP_PATH_AS_IS: 'true',
+    },
+  })
+
+  const expectedReport: JsonReporter = await fse.readJSON(
+    path.join(entryPath, 'jest-simple-json-reporter-results.json'),
+  )
+  t.deepEqual(
+    deepSort(expectedReport),
+    deepSort({
+      passed: true,
+      filesResult: [
+        {
+          passed: true,
+          path: path.join(entryPath, '__tests__', 'test1.spec.js'),
+          testResults: [],
+        },
+        {
+          passed: true,
+          path: path.join(entryPath, '__tests__', 'test2.spec.js'),
+          testResults: [],
+        },
+      ],
+    }),
+  )
+})
+
 test('assert summary structure - 2 files - only run one of them', async t => {
   const { entryPath, cleanup } = await createFolderStrucutre({
     entryName: 'project1',
