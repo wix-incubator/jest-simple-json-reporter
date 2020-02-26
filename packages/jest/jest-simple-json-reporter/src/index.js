@@ -1,6 +1,15 @@
 const fse = require('fs-extra')
 const fs = require('fs')
 
+function calculatePath(cwd, testFilePath, { useAbsolutePaths }) {
+  try {
+    const realTestFilePath = fs.realpathSync(testFilePath)
+    return useAbsolutePaths ? realTestFilePath : realTestFilePath.replace(`${cwd}`, '.')
+  } catch (e) {
+    return 'test-file-path-not-found'
+  }
+}
+
 module.exports = class JestSimpleJsonReporter {
   constructor(globalConfig, options = {}) {
     this.outputPath =
@@ -13,9 +22,8 @@ module.exports = class JestSimpleJsonReporter {
     const summary = {
       filesResult: (results.testResults || [])
         .map(fileResult => {
-          const testFilePath = fs.realpathSync(fileResult.testFilePath)
           return {
-            path: this.useAbsolutePaths ? testFilePath : testFilePath.replace(`${process.cwd()}`, '.'),
+            path: calculatePath(process.cwd(), fileResult.testFilePath, this),
             testResults: (fileResult.testResults || []).map(testResult => ({
               didRun: testResult.status === 'failed' || testResult.status === 'passed',
               passed: testResult.status === 'passed',
