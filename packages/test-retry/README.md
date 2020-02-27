@@ -38,11 +38,17 @@ yarn add --dev test-retry
 
 2. run `test-retry --test-runner jest -- jest`
 
-#### Sled
+#### Sled in remote mode
 
 1. Install & use [`jest-simple-json-reporter`](https://github.com/wix-incubator/jest-simple-json-reporter/tree/master/packages/jest/jest-simple-json-reporter)
 
-2. run `test-retry --test-runner sled -- sled <sled-flags>`
+2. run `test-retry --test-runner sled-remote -- sled remote`
+
+#### Sled in local mode
+
+1. Install & use [`jest-simple-json-reporter`](https://github.com/wix-incubator/jest-simple-json-reporter/tree/master/packages/jest/jest-simple-json-reporter)
+
+2. run `test-retry --test-runner sled-local -- sled local`
 
 -------------------
 
@@ -50,5 +56,5 @@ yarn add --dev test-retry
 
 || required | default-value | options | example | docs |
 | ---------------- | ----------| --------| ---------| -------| --- |
-|`--test-runner`| true |  | `jest`,`sled` | `--test-runner jest` | which test runner will appear in the user-command |
+|`--test-runner`| true |  | `jest`,`sled-local`,`sled-remote` | `--test-runner jest` | which test runner will appear in the user-command |
 |`--enabled`| false | true in CI | `true`,`false` | `--enabled true` | false = run only user command. true = enable retry-feature in CI for failed tests |

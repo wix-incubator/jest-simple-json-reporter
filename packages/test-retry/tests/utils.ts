@@ -2,6 +2,9 @@ import { TestInterface } from 'ava'
 import * as isCi from 'is-ci'
 import { promisify } from 'util'
 import { TestContext } from './types'
+import * as execa from 'execa'
+import * as pkgUp from 'pkg-up'
+import * as path from 'path'
 
 const resolveBinPromise = promisify<string, string>(require('resolve-bin'))
 
@@ -22,4 +25,19 @@ export function binBeforeAfterEach(test: TestInterface<TestContext>) {
       testRetryPath: isCi ? require.resolve('../dist/index.js') : `${tsNodePath} ${require.resolve('../src/index.ts')}`,
     }
   })
+}
+
+export async function installSledLocalRequirements({ cwd }: { cwd: string }): Promise<void> {
+  const installPackage = async (moduleName: string, cwd: string) => {
+    const pkgJsonPath = await pkgUp({
+      cwd: require.resolve(moduleName),
+    })
+    const packageJsonDirPath = path.dirname(pkgJsonPath)
+    // note: yarn add --dev link:... sometimes failes so this is a slower workaround.
+    await execa.command(`yarn add --dev file:${packageJsonDirPath}`, { cwd })
+  }
+  await installPackage('@babel/core', cwd)
+  await installPackage('@babel/plugin-proposal-class-properties', cwd)
+  await installPackage('@babel/plugin-proposal-decorators', cwd)
+  await installPackage('@babel/preset-env', cwd)
 }

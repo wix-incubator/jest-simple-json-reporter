@@ -33,9 +33,10 @@ function overridedUserCommand({
         command: `${userTestCommand} -t "^${failedTestNames.join('|')}$"`,
       }
     }
-    case TestRunner.sled: {
+    case TestRunner.sledLocal:
+    case TestRunner.sledRemote: {
       const env = {
-        KEEP_PATH_AS_IS: 'true',
+        ...(testRunner === TestRunner.sledRemote && { KEEP_PATH_AS_IS: 'true' }),
         ENABLE_JSON_REPORTER: 'true',
       }
       if (!report) {
@@ -56,7 +57,8 @@ function overridedUserCommand({
 }
 
 function getTestReportsS3Key({ srcMd5, cwd, userTestCommand }: Options) {
-  return `${srcMd5}-${path.basename(cwd)}-${userTestCommand}`
+  const directDirName = path.basename(cwd)
+  return `${srcMd5}-${directDirName}-${userTestCommand}`
 }
 
 function getS3Options(options: Options): { bucket: string; key: string } {
@@ -77,12 +79,17 @@ async function saveReportsToS3(options: Options): Promise<void> {
     }
     console.log(`found test-report locally on path: "${options.reportPath}".`)
     const report = await fse.readJSON(options.reportPath)
+    const s3Options = getS3Options(options)
     await saveToS3({
-      ...getS3Options(options),
+      ...s3Options,
       value: JSON.stringify(report),
-    })
+    }).catch(e =>
+      Promise.reject(
+        new Error(`could not save test-report in s3 bucket: "${s3Options.bucket}", in key: "${s3Options.key}".`),
+      ),
+    )
     console.log(
-      'tests report was uploaded succesfully and will be used to execute only the tests that were failed in the next run - only if the project didnt change!',
+      `tests report was uploaded succesfully to s3 bucket: "${s3Options.bucket}", in key: "${s3Options.key}". the test-report will be used to execute only the tests that were failed in the next run - only if the project didnt change!`,
     )
   } catch (e) {
     console.error(

@@ -56,7 +56,7 @@ test('should not enable the feature so all the tests should run twice', async t 
   const result1 = await execa.command('yarn test', {
     cwd: project1.entryPath,
     env: {
-      srcMd5: '1',
+      SRC_MD5: '1',
       TEST_1_PASS: 'true',
       TEST_2_PASS: 'true',
       [ciEnv]: 'true',
@@ -73,7 +73,7 @@ test('should not enable the feature so all the tests should run twice', async t 
   const result2 = await execa.command('yarn test', {
     cwd: project2.entryPath,
     env: {
-      srcMd5: '1',
+      SRC_MD5: '1',
       TEST_1_PASS: 'false',
       TEST_2_PASS: 'false',
       [ciEnv]: 'true',

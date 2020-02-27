@@ -42,7 +42,7 @@ test('no reporter but all tests pass in first run and yet, the tests will run ag
   const result1 = await execa.command('yarn test', {
     cwd: project1.entryPath,
     env: {
-      srcMd5: '1',
+      SRC_MD5: '1',
       TEST_1_PASS: 'true',
       [ciEnv]: 'true',
       NPM_CI_AWS_ACCESS_KEY: t.context.s3.accessKeyId,
@@ -59,7 +59,7 @@ test('no reporter but all tests pass in first run and yet, the tests will run ag
   const result2 = await execa.command('yarn test', {
     cwd: project2.entryPath,
     env: {
-      srcMd5: '1',
+      SRC_MD5: '1',
       TEST_1_PASS: 'false',
       [ciEnv]: 'true',
       NPM_CI_AWS_ACCESS_KEY: t.context.s3.accessKeyId,

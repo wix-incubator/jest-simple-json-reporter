@@ -12,7 +12,7 @@ s3BeforeAfterEach(test)
 
 binBeforeAfterEach(test)
 
-test.serial('single test - fail -> pass -> skip', async t => {
+test('single test - fail -> pass -> skip', async t => {
   const generateProject = async ({ test1_1Pass }: { test1_1Pass: boolean }) => {
     const result = await createFolderStrucutre({
       entryName: 'project1',
@@ -21,7 +21,7 @@ test.serial('single test - fail -> pass -> skip', async t => {
           name: 'test-project',
           license: 'MIT',
           scripts: {
-            test: `${t.context.bin.testRetryPath} --test-runner sled -- ${t.context.bin.sledPath} remote`,
+            test: `${t.context.bin.testRetryPath} --test-runner sled-remote -- ${t.context.bin.sledPath} remote`,
           },
         },
         'pom.xml': `
@@ -66,7 +66,7 @@ test.serial('single test - fail -> pass -> skip', async t => {
   const result1 = await execa.command('yarn test', {
     cwd: project1.entryPath,
     env: {
-      srcMd5: '1',
+      SRC_MD5: '1',
       [ciEnv]: 'true',
       NPM_CI_AWS_ACCESS_KEY: t.context.s3.accessKeyId,
       NPM_CI_AWS_SECRET_ACCESS_KEY: t.context.s3.secretAccessKey,
@@ -81,7 +81,7 @@ test.serial('single test - fail -> pass -> skip', async t => {
   const result2 = await execa.command('yarn test', {
     cwd: project2.entryPath,
     env: {
-      srcMd5: '1',
+      SRC_MD5: '1',
       [ciEnv]: 'true',
       NPM_CI_AWS_ACCESS_KEY: t.context.s3.accessKeyId,
       NPM_CI_AWS_SECRET_ACCESS_KEY: t.context.s3.secretAccessKey,
@@ -95,18 +95,19 @@ test.serial('single test - fail -> pass -> skip', async t => {
   const result3 = await execa.command('yarn test', {
     cwd: project3.entryPath,
     env: {
-      srcMd5: '1',
+      SRC_MD5: '1',
       [ciEnv]: 'true',
       NPM_CI_AWS_ACCESS_KEY: t.context.s3.accessKeyId,
       NPM_CI_AWS_SECRET_ACCESS_KEY: t.context.s3.secretAccessKey,
       NPM_CI_AWS_S3_ADDRESS: t.context.s3.s3Address,
     },
-    stdio: 'ignore',
+    stdio: 'pipe',
   })
   t.deepEqual(result3.exitCode, 0)
+  t.true(result3.stdout.includes('skipping tests. all tests passed in last run.'))
 })
 
-test.serial('multiple test files - some fail -> pass -> skip', async t => {
+test('multiple test files - some fail -> pass -> skip', async t => {
   const generateProject = async ({
     test1_1Pass,
     test2_1Pass,
@@ -123,7 +124,7 @@ test.serial('multiple test files - some fail -> pass -> skip', async t => {
           name: 'test-project',
           license: 'MIT',
           scripts: {
-            test: `${t.context.bin.testRetryPath} --test-runner sled -- ${t.context.bin.sledPath} remote`,
+            test: `${t.context.bin.testRetryPath} --test-runner sled-remote -- ${t.context.bin.sledPath} remote`,
           },
         },
         'pom.xml': `
@@ -190,7 +191,7 @@ test.serial('multiple test files - some fail -> pass -> skip', async t => {
   const result1 = await execa.command('yarn test', {
     cwd: project1.entryPath,
     env: {
-      srcMd5: '1',
+      SRC_MD5: '1',
       [ciEnv]: 'true',
       NPM_CI_AWS_ACCESS_KEY: t.context.s3.accessKeyId,
       NPM_CI_AWS_SECRET_ACCESS_KEY: t.context.s3.secretAccessKey,
@@ -205,7 +206,7 @@ test.serial('multiple test files - some fail -> pass -> skip', async t => {
   const result2 = await execa.command('yarn test', {
     cwd: project2.entryPath,
     env: {
-      srcMd5: '1',
+      SRC_MD5: '1',
       [ciEnv]: 'true',
       NPM_CI_AWS_ACCESS_KEY: t.context.s3.accessKeyId,
       NPM_CI_AWS_SECRET_ACCESS_KEY: t.context.s3.secretAccessKey,
@@ -219,18 +220,19 @@ test.serial('multiple test files - some fail -> pass -> skip', async t => {
   const result3 = await execa.command('yarn test', {
     cwd: project3.entryPath,
     env: {
-      srcMd5: '1',
+      SRC_MD5: '1',
       [ciEnv]: 'true',
       NPM_CI_AWS_ACCESS_KEY: t.context.s3.accessKeyId,
       NPM_CI_AWS_SECRET_ACCESS_KEY: t.context.s3.secretAccessKey,
       NPM_CI_AWS_S3_ADDRESS: t.context.s3.s3Address,
     },
-    stdio: 'ignore',
+    stdio: 'pipe',
   })
   t.deepEqual(result3.exitCode, 0)
+  t.true(result3.stdout.includes('skipping tests. all tests passed in last run.'))
 })
 
-test.serial('multiple test files - all fail -> pass -> skip', async t => {
+test('multiple test files - all fail -> pass -> skip', async t => {
   const generateProject = async ({
     test1_1Pass,
     test2_1Pass,
@@ -247,7 +249,7 @@ test.serial('multiple test files - all fail -> pass -> skip', async t => {
           name: 'test-project',
           license: 'MIT',
           scripts: {
-            test: `${t.context.bin.testRetryPath} --test-runner sled -- ${t.context.bin.sledPath} remote`,
+            test: `${t.context.bin.testRetryPath} --test-runner sled-remote -- ${t.context.bin.sledPath} remote`,
           },
         },
         'pom.xml': `
@@ -314,7 +316,7 @@ test.serial('multiple test files - all fail -> pass -> skip', async t => {
   const result1 = await execa.command('yarn test', {
     cwd: project1.entryPath,
     env: {
-      srcMd5: '1',
+      SRC_MD5: '1',
       [ciEnv]: 'true',
       NPM_CI_AWS_ACCESS_KEY: t.context.s3.accessKeyId,
       NPM_CI_AWS_SECRET_ACCESS_KEY: t.context.s3.secretAccessKey,
@@ -329,7 +331,7 @@ test.serial('multiple test files - all fail -> pass -> skip', async t => {
   const result2 = await execa.command('yarn test', {
     cwd: project2.entryPath,
     env: {
-      srcMd5: '1',
+      SRC_MD5: '1',
       [ciEnv]: 'true',
       NPM_CI_AWS_ACCESS_KEY: t.context.s3.accessKeyId,
       NPM_CI_AWS_SECRET_ACCESS_KEY: t.context.s3.secretAccessKey,
@@ -343,18 +345,19 @@ test.serial('multiple test files - all fail -> pass -> skip', async t => {
   const result3 = await execa.command('yarn test', {
     cwd: project3.entryPath,
     env: {
-      srcMd5: '1',
+      SRC_MD5: '1',
       [ciEnv]: 'true',
       NPM_CI_AWS_ACCESS_KEY: t.context.s3.accessKeyId,
       NPM_CI_AWS_SECRET_ACCESS_KEY: t.context.s3.secretAccessKey,
       NPM_CI_AWS_S3_ADDRESS: t.context.s3.s3Address,
     },
-    stdio: 'ignore',
+    stdio: 'pipe',
   })
   t.deepEqual(result3.exitCode, 0)
+  t.true(result3.stdout.includes('skipping tests. all tests passed in last run.'))
 })
 
-test.serial('multiple test files - all pass -> skip', async t => {
+test('multiple test files - all pass -> skip', async t => {
   const generateProject = async ({
     test1_1Pass,
     test2_1Pass,
@@ -371,7 +374,7 @@ test.serial('multiple test files - all pass -> skip', async t => {
           name: 'test-project',
           license: 'MIT',
           scripts: {
-            test: `${t.context.bin.testRetryPath} --test-runner sled -- ${t.context.bin.sledPath} remote`,
+            test: `${t.context.bin.testRetryPath} --test-runner sled-remote -- ${t.context.bin.sledPath} remote`,
           },
         },
         'pom.xml': `
@@ -437,7 +440,7 @@ test.serial('multiple test files - all pass -> skip', async t => {
   const result1 = await execa.command('yarn test', {
     cwd: project1.entryPath,
     env: {
-      srcMd5: '1',
+      SRC_MD5: '1',
       [ciEnv]: 'true',
       NPM_CI_AWS_ACCESS_KEY: t.context.s3.accessKeyId,
       NPM_CI_AWS_SECRET_ACCESS_KEY: t.context.s3.secretAccessKey,
@@ -451,13 +454,14 @@ test.serial('multiple test files - all pass -> skip', async t => {
   const result2 = await execa.command('yarn test', {
     cwd: project2.entryPath,
     env: {
-      srcMd5: '1',
+      SRC_MD5: '1',
       [ciEnv]: 'true',
       NPM_CI_AWS_ACCESS_KEY: t.context.s3.accessKeyId,
       NPM_CI_AWS_SECRET_ACCESS_KEY: t.context.s3.secretAccessKey,
       NPM_CI_AWS_S3_ADDRESS: t.context.s3.s3Address,
     },
-    stdio: 'ignore',
+    stdio: 'pipe',
   })
   t.deepEqual(result2.exitCode, 0)
+  t.true(result2.stdout.includes('skipping tests. all tests passed in last run.'))
 })

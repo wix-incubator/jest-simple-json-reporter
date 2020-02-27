@@ -14,7 +14,8 @@ export type TestJsonReporter = {
 
 export enum TestRunner {
   jest = 'jest',
-  sled = 'sled',
+  sledLocal = 'sled-local',
+  sledRemote = 'sled-remote',
 }
 
 export type Options = {

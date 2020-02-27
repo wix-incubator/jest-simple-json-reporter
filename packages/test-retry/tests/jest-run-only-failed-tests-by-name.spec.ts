@@ -57,7 +57,7 @@ test('all tests pass on first run', async t => {
   const result1 = await execa.command('yarn test', {
     cwd: project1.entryPath,
     env: {
-      srcMd5: '1',
+      SRC_MD5: '1',
       TEST_1_PASS: 'true',
       TEST_2_PASS: 'true',
       [ciEnv]: 'true',
@@ -73,7 +73,7 @@ test('all tests pass on first run', async t => {
   const result2 = await execa.command('yarn test', {
     cwd: project2.entryPath,
     env: {
-      srcMd5: '1',
+      SRC_MD5: '1',
       TEST_1_PASS: 'false',
       TEST_2_PASS: 'false',
       [ciEnv]: 'true',
@@ -81,9 +81,10 @@ test('all tests pass on first run', async t => {
       NPM_CI_AWS_SECRET_ACCESS_KEY: t.context.s3.secretAccessKey,
       NPM_CI_AWS_S3_ADDRESS: t.context.s3.s3Address,
     },
-    stdio: 'ignore',
+    stdio: 'pipe',
   })
   t.deepEqual(result2.exitCode, 0)
+  t.true(result2.stdout.includes('skipping tests. all tests passed in last run.'))
 })
 
 test('one test fail in first run and then pass in second run', async t => {
@@ -119,7 +120,7 @@ test('one test fail in first run and then pass in second run', async t => {
   const result1 = await execa.command('yarn test', {
     cwd: project1.entryPath,
     env: {
-      srcMd5: '1',
+      SRC_MD5: '1',
       TEST_1_1_PASS: 'false',
       [ciEnv]: 'true',
       NPM_CI_AWS_ACCESS_KEY: t.context.s3.accessKeyId,
@@ -136,7 +137,7 @@ test('one test fail in first run and then pass in second run', async t => {
   const result2 = await execa.command('yarn test', {
     cwd: project2.entryPath,
     env: {
-      srcMd5: '1',
+      SRC_MD5: '1',
       TEST_1_1_PASS: 'true',
       [ciEnv]: 'true',
       NPM_CI_AWS_ACCESS_KEY: t.context.s3.accessKeyId,
@@ -152,16 +153,17 @@ test('one test fail in first run and then pass in second run', async t => {
   const result3 = await execa.command('yarn test', {
     cwd: project3.entryPath,
     env: {
-      srcMd5: '1',
+      SRC_MD5: '1',
       TEST_1_1_PASS: 'false',
       [ciEnv]: 'true',
       NPM_CI_AWS_ACCESS_KEY: t.context.s3.accessKeyId,
       NPM_CI_AWS_SECRET_ACCESS_KEY: t.context.s3.secretAccessKey,
       NPM_CI_AWS_S3_ADDRESS: t.context.s3.s3Address,
     },
-    stdio: 'ignore',
+    stdio: 'pipe',
   })
   t.deepEqual(result3.exitCode, 0)
+  t.true(result3.stdout.includes('skipping tests. all tests passed in last run.'))
 })
 
 test('all tests pass on second run', async t => {
@@ -240,7 +242,7 @@ test('all tests pass on second run', async t => {
   const result1 = await execa.command('yarn test', {
     cwd: project1.entryPath,
     env: {
-      srcMd5: '1',
+      SRC_MD5: '1',
       TEST_1_1_PASS: 'true',
       TEST_1_2_PASS: 'false',
       TEST_2_1_PASS: 'true',
@@ -262,7 +264,7 @@ test('all tests pass on second run', async t => {
   const result2 = await execa.command('yarn test', {
     cwd: project2.entryPath,
     env: {
-      srcMd5: '1',
+      SRC_MD5: '1',
       TEST_1_1_PASS: 'false',
       TEST_1_2_PASS: 'true',
       TEST_2_1_PASS: 'false',
@@ -283,7 +285,7 @@ test('all tests pass on second run', async t => {
   const result3 = await execa.command('yarn test', {
     cwd: project3.entryPath,
     env: {
-      srcMd5: '1',
+      SRC_MD5: '1',
       TEST_1_1_PASS: 'false',
       TEST_1_2_PASS: 'false',
       TEST_2_1_PASS: 'false',
@@ -295,9 +297,10 @@ test('all tests pass on second run', async t => {
       NPM_CI_AWS_SECRET_ACCESS_KEY: t.context.s3.secretAccessKey,
       NPM_CI_AWS_S3_ADDRESS: t.context.s3.s3Address,
     },
-    stdio: 'ignore',
+    stdio: 'pipe',
   })
   t.deepEqual(result3.exitCode, 0)
+  t.true(result3.stdout.includes('skipping tests. all tests passed in last run.'))
 })
 
 test('try to run executable that is not found from the project-dir but it still work because we run everything with yarn or npm and they put jest in the PATH', async t => {
@@ -331,9 +334,8 @@ test('try to run executable that is not found from the project-dir but it still 
   const result1 = await execa.command('yarn run test', {
     cwd: entryPath,
     env: {
-      srcMd5: '1',
+      SRC_MD5: '1',
       TEST_1_PASS: 'true',
-      TEST_2_PASS: 'true',
       [ciEnv]: 'true',
       NPM_CI_AWS_ACCESS_KEY: t.context.s3.accessKeyId,
       NPM_CI_AWS_SECRET_ACCESS_KEY: t.context.s3.secretAccessKey,
@@ -347,9 +349,8 @@ test('try to run executable that is not found from the project-dir but it still 
   const result2 = await execa.command('npm run test', {
     cwd: entryPath,
     env: {
-      srcMd5: '1',
-      TEST_1_PASS: 'true',
-      TEST_2_PASS: 'true',
+      SRC_MD5: '1',
+      TEST_1_PASS: 'false',
       [ciEnv]: 'true',
       NPM_CI_AWS_ACCESS_KEY: t.context.s3.accessKeyId,
       NPM_CI_AWS_SECRET_ACCESS_KEY: t.context.s3.secretAccessKey,
