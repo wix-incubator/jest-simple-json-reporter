@@ -42,7 +42,7 @@ test('missing command to run at the end', async t => {
   const result1 = await execa.command('yarn test', {
     cwd: entryPath,
     env: {
-      srcMd5: '1',
+      SRC_MD5: '1',
       TEST_1_PASS: 'true',
       TEST_2_PASS: 'true',
       [ciEnv]: 'true',
@@ -91,7 +91,7 @@ test('invalid command to run at the end', async t => {
   const result1 = await execa.command('yarn test', {
     cwd: entryPath,
     env: {
-      srcMd5: '1',
+      SRC_MD5: '1',
       TEST_1_PASS: 'true',
       TEST_2_PASS: 'true',
       [ciEnv]: 'true',

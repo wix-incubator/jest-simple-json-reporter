@@ -94,7 +94,7 @@ export async function readFromS3<Result>({
         }
         const result = data.Body?.toString()
         if (result === undefined) {
-          return reject('return value from s3 is undefined. looks like a bug')
+          return reject('test-retry - return value from s3 is undefined. looks like a bug')
         }
         return resolve(mapper(result))
       },
