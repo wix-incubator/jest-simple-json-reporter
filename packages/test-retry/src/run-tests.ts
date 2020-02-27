@@ -26,8 +26,8 @@ function overridedUserCommand({
         }
       }
       const failedTestNames = report.filesResult
-        .reduce((array, fileResult) => [...array, ...fileResult.testResults], [])
-        .filter(testResult => !testResult.passed)
+        .reduce<TestResult[]>((array, fileResult) => [...array, ...fileResult.testResults], [])
+        .filter(testResult => testResult.didRun && !testResult.passed)
         .map(testResult => testResult.fullName)
         .map(escapeStringForValidRegex)
       return {
