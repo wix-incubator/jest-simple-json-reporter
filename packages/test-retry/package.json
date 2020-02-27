@@ -23,16 +23,16 @@
     "build": "yarn clean && yarn tsc && chmod u+x ./dist/index.js"
   },
   "dependencies": {
+    "aws-sdk": "2.622.0",
+    "chance": "1.1.4",
     "execa": "4.0.0",
     "fs-extra": "8.1.0",
-    "to-regex": "3.0.2",
     "is-ci": "2.0.0",
-    "chance": "1.1.4",
-    "aws-sdk": "2.622.0",
-    "@jsbits/escape-regex-str": "1.0.3"
+    "to-regex": "3.0.2",
+    "yargs": "^15.1.0"
   },
   "devDependencies": {
-    "jest-simple-json-reporter": "^1.0.0",
-    "@wix/test-json-reporter-api":"^1.0.0"
+    "@wix/test-json-reporter-api": "^1.0.0",
+    "jest-simple-json-reporter": "^1.0.0"
   }
 }

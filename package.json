@@ -53,7 +53,7 @@
     "pretty-quick": "2.0.1",
     "resolve-bin": "^0.4.0",
     "s3rver": "3.5.0",
-    "sled-test-runner": "^1.0.380",
+    "sled-test-runner": "0.0.0-dd3bf7bf9a2246de02274f0c455ffe30",
     "sort-deep-object-arrays": "^1.1.2",
     "ts-jest": "^24.3.0",
     "ts-node": "^8.6.2",
