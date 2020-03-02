@@ -1,5 +1,5 @@
 import testWithTypedContext, { TestInterface } from 'ava'
-import createFolderStrucutre from 'create-folder-structure'
+import { createFolder } from 'create-folder-structure'
 import * as execa from 'execa'
 import { s3BeforeAfterEach } from './s3-mock-setup'
 import { TestContext } from './types'
@@ -13,20 +13,18 @@ binBeforeAll(test)
 
 test('should not enable the feature so all the tests should run twice', async t => {
   const generateProject = () =>
-    createFolderStrucutre({
-      entryName: 'project1',
-      content: {
-        'package.json': {
-          name: 'test-project',
-          license: 'MIT',
-          scripts: {
-            test: `${t.context.bin.testRetryPath} --enabled false --test-runner jest -- ${t.context.bin.jestPath}`,
-          },
-          jest: {
-            reporters: ['default', jestSimpleJsonReporterPath],
-          },
+    createFolder({
+      'package.json': {
+        name: 'test-project',
+        license: 'MIT',
+        scripts: {
+          test: `${t.context.bin.testRetryPath} --enabled false --test-runner jest -- ${t.context.bin.jestPath}`,
         },
-        '__tests__/test1.spec.js': `
+        jest: {
+          reporters: ['default', jestSimpleJsonReporterPath],
+        },
+      },
+      '__tests__/test1.spec.js': `
                           describe('1', () => {
                             test('test-passed1!', async () => {
                                 if (process.env['TEST_1_PASS'] === 'true') {
@@ -37,7 +35,7 @@ test('should not enable the feature so all the tests should run twice', async t 
                               })
                           })
                           `,
-        '__tests__/test2.spec.js': `
+      '__tests__/test2.spec.js': `
                           describe('2', () => {
                             test('test-passed1!', async () => {
                                 if (process.env['TEST_2_PASS'] === 'true') {
@@ -48,13 +46,11 @@ test('should not enable the feature so all the tests should run twice', async t 
                               })
                           })
                           `,
-      },
     })
 
-  const project1 = await generateProject()
-
+  const project1EntryPath = await generateProject()
   const result1 = await execa.command('yarn test', {
-    cwd: project1.entryPath,
+    cwd: project1EntryPath,
     env: {
       SRC_MD5: '1',
       TEST_1_PASS: 'true',
@@ -68,10 +64,10 @@ test('should not enable the feature so all the tests should run twice', async t 
   })
   t.deepEqual(result1.exitCode, 0)
 
-  const project2 = await generateProject()
+  const project2EntryPath = await generateProject()
 
   const result2 = await execa.command('yarn test', {
-    cwd: project2.entryPath,
+    cwd: project2EntryPath,
     env: {
       SRC_MD5: '1',
       TEST_1_PASS: 'false',

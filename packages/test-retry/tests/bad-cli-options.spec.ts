@@ -1,5 +1,5 @@
 import testWithTypedContext, { TestInterface } from 'ava'
-import createFolderStrucutre from 'create-folder-structure'
+import { createFolder } from 'create-folder-structure'
 import * as execa from 'execa'
 import { ciEnv, jestSimpleJsonReporterPath, binBeforeAll } from './dependencies-setup'
 import { TestContext } from './types'
@@ -12,31 +12,28 @@ s3BeforeAfterEach(test)
 binBeforeAll(test)
 
 test('missing command to run at the end', async t => {
-  const { entryPath } = await createFolderStrucutre({
-    entryName: 'project1',
-    content: {
-      'package.json': {
-        name: 'test-project',
-        license: 'MIT',
-        scripts: {
-          test: `${t.context.bin.testRetryPath} --test-runner jest`,
-        },
-        jest: {
-          reporters: ['default', jestSimpleJsonReporterPath],
-        },
+  const entryPath = await createFolder({
+    'package.json': {
+      name: 'test-project',
+      license: 'MIT',
+      scripts: {
+        test: `${t.context.bin.testRetryPath} --test-runner jest`,
       },
-      '__tests__/test1.spec.js': `
-                          describe('1', () => {
-                            test('test-passed1!', async () => {
-                                if (process.env['TEST_1_PASS'] === 'true') {
-                                    expect(1).toEqual(1)
-                                  } else {
-                                    expect(1).toEqual(2)
-                                  }
-                              })
-                          })
-                          `,
+      jest: {
+        reporters: ['default', jestSimpleJsonReporterPath],
+      },
     },
+    '__tests__/test1.spec.js': `
+                        describe('1', () => {
+                          test('test-passed1!', async () => {
+                              if (process.env['TEST_1_PASS'] === 'true') {
+                                  expect(1).toEqual(1)
+                                } else {
+                                  expect(1).toEqual(2)
+                                }
+                            })
+                        })
+                        `,
   })
 
   const result1 = await execa.command('yarn test', {
@@ -61,20 +58,18 @@ test('missing command to run at the end', async t => {
   )
 })
 test('invalid command to run at the end', async t => {
-  const { entryPath } = await createFolderStrucutre({
-    entryName: 'project1',
-    content: {
-      'package.json': {
-        name: 'test-project',
-        license: 'MIT',
-        scripts: {
-          test: `${t.context.bin.testRetryPath} --test-runner jest --`,
-        },
-        jest: {
-          reporters: ['default', jestSimpleJsonReporterPath],
-        },
+  const entryPath = await createFolder({
+    'package.json': {
+      name: 'test-project',
+      license: 'MIT',
+      scripts: {
+        test: `${t.context.bin.testRetryPath} --test-runner jest --`,
       },
-      '__tests__/test1.spec.js': `
+      jest: {
+        reporters: ['default', jestSimpleJsonReporterPath],
+      },
+    },
+    '__tests__/test1.spec.js': `
                           describe('1', () => {
                             test('test-passed1!', async () => {
                                 if (process.env['TEST_1_PASS'] === 'true') {
@@ -85,7 +80,6 @@ test('invalid command to run at the end', async t => {
                               })
                           })
                           `,
-    },
   })
 
   const result1 = await execa.command('yarn test', {

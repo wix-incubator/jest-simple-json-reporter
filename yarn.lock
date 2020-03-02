@@ -3982,10 +3982,10 @@ cosmiconfig@^5.1.0:
     js-yaml "^3.13.1"
     parse-json "^4.0.0"
 
-create-folder-structure@^3.0.3:
-  version "3.0.3"
-  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/create-folder-structure/-/create-folder-structure-3.0.3.tgz#471a8052ca9d618129f728acce8d29b068fb509b"
-  integrity sha1-RxqAUsqdYYEp9yiszo0psGj7UJs=
+create-folder-structure@^3.0.4:
+  version "3.0.4"
+  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/create-folder-structure/-/create-folder-structure-3.0.4.tgz#e6b29ed888d21f5da1d07819ab1e06353f003aec"
+  integrity sha1-5rKe2IjSH12h0HgZqx4GNT8AOuw=
   dependencies:
     "@types/tmp" "^0.1.0"
     chance "^1.1.4"

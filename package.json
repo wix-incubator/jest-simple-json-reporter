@@ -30,7 +30,7 @@
     "@typescript-eslint/eslint-plugin": "^2.14.0",
     "@typescript-eslint/parser": "^2.14.0",
     "ava": "2.x.x",
-    "create-folder-structure": "^3.0.3",
+    "create-folder-structure": "^3.0.4",
     "eslint": "6.5.1",
     "eslint-config-prettier": "4.3.0",
     "eslint-plugin-jest": "22.6.4",
