@@ -57,4 +57,4 @@ yarn add --dev test-retry
 || required | default-value | options | example | docs |
 | ---------------- | ----------| --------| ---------| -------| --- |
 |`--test-runner`| true |  | `jest`,`sled-local`,`sled-remote` | `--test-runner jest` | which test runner will appear in the user-command |
-|`--enabled`| false | true in CI | `true`,`false` | `--enabled true` | false = run only user command. true = enable retry-feature in CI for failed tests |
+|`--enabled`| false | true in CI | `true`,`false` | `--enabled true` | false = run only user command. true = enable retry-feature for failed tests. (in local machines, it required aws-token |
