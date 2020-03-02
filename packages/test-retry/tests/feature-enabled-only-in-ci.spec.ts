@@ -3,13 +3,13 @@ import createFolderStrucutre from 'create-folder-structure'
 import * as execa from 'execa'
 import { s3BeforeAfterEach } from './s3-mock-setup'
 import { TestContext } from './types'
-import { binBeforeAfterEach, ciEnv, jestSimpleJsonReporterPath } from './utils'
+import { binBeforeAll, ciEnv, jestSimpleJsonReporterPath } from './dependencies-setup'
 
 const test = testWithTypedContext as TestInterface<TestContext>
 
 s3BeforeAfterEach(test)
 
-binBeforeAfterEach(test)
+binBeforeAll(test)
 
 test('should not enable the feature so all the tests should run twice', async t => {
   const generateProject = () =>

@@ -1,7 +1,7 @@
 import testWithTypedContext, { TestInterface } from 'ava'
 import createFolderStrucutre from 'create-folder-structure'
 import * as execa from 'execa'
-import { ciEnv, jestSimpleJsonReporterPath, binBeforeAfterEach } from './utils'
+import { ciEnv, jestSimpleJsonReporterPath, binBeforeAll } from './dependencies-setup'
 import { TestContext } from './types'
 import { s3BeforeAfterEach } from './s3-mock-setup'
 
@@ -9,7 +9,7 @@ const test = testWithTypedContext as TestInterface<TestContext>
 
 s3BeforeAfterEach(test)
 
-binBeforeAfterEach(test)
+binBeforeAll(test)
 
 test('missing command to run at the end', async t => {
   const { entryPath } = await createFolderStrucutre({

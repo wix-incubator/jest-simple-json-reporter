@@ -3,13 +3,13 @@ import createFolderStrucutre from 'create-folder-structure'
 import * as execa from 'execa'
 import { s3BeforeAfterEach } from './s3-mock-setup'
 import { TestContext } from './types'
-import { binBeforeAfterEach, ciEnv } from './utils'
+import { binBeforeAll, ciEnv } from './dependencies-setup'
 
 const test = testWithTypedContext as TestInterface<TestContext>
 
 s3BeforeAfterEach(test)
 
-binBeforeAfterEach(test)
+binBeforeAll(test)
 
 test('no reporter but all tests pass in first run and yet, the tests will run again in second time (and we make sure they will fail in second time)', async t => {
   const generateProject = () =>

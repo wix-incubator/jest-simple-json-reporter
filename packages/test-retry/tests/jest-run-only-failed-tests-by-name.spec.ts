@@ -1,16 +1,15 @@
 import testWithTypedContext, { TestInterface } from 'ava'
 import createFolderStrucutre from 'create-folder-structure'
 import * as execa from 'execa'
-import { ciEnv, jestSimpleJsonReporterPath } from './utils'
+import { ciEnv, jestSimpleJsonReporterPath, binBeforeAll } from './dependencies-setup'
 import { s3BeforeAfterEach } from './s3-mock-setup'
 import { TestContext } from './types'
-import { binBeforeAfterEach } from './utils'
 
 const test = testWithTypedContext as TestInterface<TestContext>
 
 s3BeforeAfterEach(test)
 
-binBeforeAfterEach(test)
+binBeforeAll(test)
 
 test('all tests pass on first run', async t => {
   const generateProject = () =>

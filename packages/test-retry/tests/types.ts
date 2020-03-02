@@ -9,9 +9,10 @@ export type TestContext = {
     s3Address: string
     cleanupS3Storage: () => Promise<void>
   }
+  sledVersion: string
+  sledProjectLockFilePath: string
   bin: {
     tsNodePath: string
-    sledPath: string
     jestPath: string
     testRetryPath: string
   }
