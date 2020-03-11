@@ -470,7 +470,7 @@ test('mode:remote - single test - fail -> pass -> skip', async t => {
           name: 'test-project',
           license: 'MIT',
           scripts: {
-            test: `${t.context.bin.testRetryPath} --test-runner sled-local -- sled-test-runner local`,
+            test: `${t.context.bin.testRetryPath} --test-runner sled-remote -- sled-test-runner remote`,
           },
           devDependencies: {
             'sled-test-runner': t.context.sledVersion,
@@ -571,7 +571,7 @@ test('mode:remote - multiple test files - some fail -> pass -> skip', async t =>
           name: 'test-project',
           license: 'MIT',
           scripts: {
-            test: `${t.context.bin.testRetryPath} --test-runner sled-local -- sled-test-runner local`,
+            test: `${t.context.bin.testRetryPath} --test-runner sled-remote -- sled-test-runner remote`,
           },
           devDependencies: {
             'sled-test-runner': t.context.sledVersion,
@@ -694,7 +694,7 @@ test('mode:remote - multiple test files - all fail -> pass -> skip', async t => 
           name: 'test-project',
           license: 'MIT',
           scripts: {
-            test: `${t.context.bin.testRetryPath} --test-runner sled-local -- sled-test-runner local`,
+            test: `${t.context.bin.testRetryPath} --test-runner sled-remote -- sled-test-runner remote`,
           },
           devDependencies: {
             'sled-test-runner': t.context.sledVersion,
@@ -817,7 +817,7 @@ test('mode:remote - multiple test files - all pass -> skip', async t => {
           name: 'test-project',
           license: 'MIT',
           scripts: {
-            test: `${t.context.bin.testRetryPath} --test-runner sled-local -- sled-test-runner local`,
+            test: `${t.context.bin.testRetryPath} --test-runner sled-remote -- sled-test-runner remote`,
           },
           devDependencies: {
             'sled-test-runner': t.context.sledVersion,
@@ -906,4 +906,104 @@ test('mode:remote - multiple test files - all pass -> skip', async t => {
   })
   t.deepEqual(result2.exitCode, 0)
   t.true(result2.stdout.includes('skipping tests. all tests passed in last run.'))
+})
+
+test.only('mode:remote - single test - complex sled folder - fail -> pass -> skip', async t => {
+  const generateProject = async ({ test2_1Pass }: { test2_1Pass: boolean }) => {
+    const result = await createFolderStrucutre({
+      entryName: 'project1',
+      content: {
+        'package.json': {
+          name: 'test-project',
+          license: 'MIT',
+          scripts: {
+            test: `${t.context.bin.testRetryPath} --test-runner sled-remote -- sled-test-runner remote --test-path-ignore-patterns __local__`,
+          },
+          devDependencies: {
+            'sled-test-runner': t.context.sledVersion,
+          },
+        },
+        'pom.xml': `
+                    <?xml version="1.0" encoding="UTF-8"?>
+                        <project>
+                            <modelVersion>4.0.0</modelVersion>
+                            <groupId>com.wixpress</groupId>
+                            <artifactId>hello-stav-2</artifactId>
+                            <packaging>pom</packaging>
+                            <version>1.0.0-SNAPSHOT</version>
+                        </project>
+                    `,
+        'dist/statics/index.min.js': "console.log('hi')",
+        'sled/sled.json': {
+          artifacts_upload: {
+            patterns: ['**/*.min.js'],
+          },
+          sled_folder_relative_path_in_repo: 'sled',
+        },
+        'sled/__local__/test1.spec.js': `
+                          describe('1', () => {
+                            test('1.1', async () => {
+                              expect(1).toEqual(2)
+                            })
+                          })
+                          `,
+        'sled/__not-local__/test2.spec.js': `
+                          describe('2', () => {
+                            test('2.1', async () => {
+                                if (${test2_1Pass}) {
+                                    expect(1).toEqual(1)
+                                  } else {
+                                    expect(1).toEqual(2)
+                                  }
+                              })
+                          })
+                          `,
+      },
+    })
+    await installSledProject({ cwd: result.entryPath, ...t.context })
+    return result
+  }
+
+  const project1 = await generateProject({ test2_1Pass: false })
+
+  const result1 = await execa.command('yarn test', {
+    cwd: project1.entryPath,
+    env: {
+      SRC_MD5: '1',
+      [ciEnv]: 'true',
+      NPM_CI_AWS_ACCESS_KEY: t.context.s3.accessKeyId,
+      NPM_CI_AWS_SECRET_ACCESS_KEY: t.context.s3.secretAccessKey,
+      NPM_CI_AWS_S3_ADDRESS: t.context.s3.s3Address,
+    },
+    reject: false,
+  })
+  t.deepEqual(result1.exitCode, 1)
+
+  const project2 = await generateProject({ test2_1Pass: true })
+  const result2 = await execa.command('yarn test', {
+    cwd: project2.entryPath,
+    env: {
+      SRC_MD5: '1',
+      [ciEnv]: 'true',
+      NPM_CI_AWS_ACCESS_KEY: t.context.s3.accessKeyId,
+      NPM_CI_AWS_SECRET_ACCESS_KEY: t.context.s3.secretAccessKey,
+      NPM_CI_AWS_S3_ADDRESS: t.context.s3.s3Address,
+    },
+  })
+  t.deepEqual(result2.exitCode, 0)
+
+  const project3 = await generateProject({ test2_1Pass: false })
+  const result3 = await execa.command('yarn test', {
+    cwd: project3.entryPath,
+    env: {
+      SRC_MD5: '1',
+      [ciEnv]: 'true',
+      NPM_CI_AWS_ACCESS_KEY: t.context.s3.accessKeyId,
+      NPM_CI_AWS_SECRET_ACCESS_KEY: t.context.s3.secretAccessKey,
+      NPM_CI_AWS_S3_ADDRESS: t.context.s3.s3Address,
+    },
+    stdio: 'pipe',
+  })
+  t.deepEqual(result3.exitCode, 0)
+  t.true(result3.stdout.includes('skipping tests. all tests passed in last run.'))
 })

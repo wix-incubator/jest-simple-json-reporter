@@ -91,3 +91,4 @@ typings/
 
 dist
 .idea
+.DS_Store

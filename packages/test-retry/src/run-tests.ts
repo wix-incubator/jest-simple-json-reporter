@@ -49,6 +49,7 @@ function overridedUserCommand({
       const failedTestFiles = report.filesResult
         .filter(fileResult => !fileResult.passed)
         .map(fileResult => fileResult.path)
+
       return {
         command: `${userTestCommand} -f "${failedTestFiles.join('|')}"`,
         env,
@@ -149,6 +150,10 @@ export async function runSpecificTests(options: Options): Promise<void> {
       }
     }
   })
+
+  console.log(
+    `test-retry - searching last report in s3-bucket-name: "${s3Options.bucket}", s3-bucket-key: "${s3Options.key}"`,
+  )
 
   if (!lastReportExists) {
     console.log(
