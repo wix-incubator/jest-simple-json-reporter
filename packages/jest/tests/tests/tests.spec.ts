@@ -409,9 +409,6 @@ test('assert summary structure - some tests fail', async t => {
   await execa('yarn', 'test'.split(' '), {
     cwd: entryPath,
     reject: false,
-    env: {
-      TEST_JSON_REPORTER_USE_RELATIVE_PATHS: 'true',
-    },
   })
 
   const expectedReport: JsonReporter = await fse.readJSON(
@@ -625,6 +622,184 @@ test('assert summary structure - 2 files - only run one of them', async t => {
           passed: true,
           path: `./${path.join('.', '__tests__', 'test2.spec.js')}`,
           testResults: [
+            {
+              didRun: false,
+              passed: false,
+              fullName: '2 test-failed!',
+            },
+          ],
+        },
+      ],
+    }),
+  )
+})
+
+test('assert summary structure - all tests are skipped', async t => {
+  const { entryPath, cleanup } = await createFolderStrucutre({
+    entryName: 'project1',
+    content: {
+      'package.json': {
+        name: 'test-project',
+        license: 'MIT',
+        scripts: {
+          test: `${t.context.jestPath} --runInBand`,
+        },
+        jest: {
+          reporters: ['default', [jestSimpleJsonReporterPath, {}]],
+        },
+      },
+      '.npmrc': 'registry=https://registry.npmjs.org/',
+      '__tests__/test1.spec.js': `
+                  describe('1', () => {
+                    test.skip('test-passed1!', async () => {
+                        expect(1).toEqual(1)
+                      })
+                    test.skip('test-passed2!', async () => {
+                        expect(2).toEqual(2)
+                      })
+                  })
+                  `,
+      '__tests__/test2.spec.js': `
+                  describe('2', () => {
+                    test.skip('test-passed!', async () => {
+                        expect(1).toEqual(1)
+                      })
+                    test.skip('test-failed!', async () => {
+                        expect(1).toEqual(2)
+                      })
+                  })
+                  `,
+    },
+  })
+  t.context.cleanup = cleanup
+
+  await execa('yarn', 'test'.split(' '), {
+    cwd: entryPath,
+    reject: false,
+  })
+
+  const expectedReport: JsonReporter = await fse.readJSON(
+    path.join(entryPath, 'jest-simple-json-reporter-results.json'),
+  )
+  t.deepEqual(
+    deepSort(expectedReport),
+    deepSort({
+      passed: true,
+      filesResult: [
+        {
+          passed: true,
+          path: `./${path.join('__tests__', 'test1.spec.js')}`,
+          testResults: [
+            {
+              didRun: false,
+              passed: false,
+              fullName: '1 test-passed1!',
+            },
+            {
+              didRun: false,
+              passed: false,
+              fullName: '1 test-passed2!',
+            },
+          ],
+        },
+        {
+          passed: true,
+          path: `./${path.join('__tests__', 'test2.spec.js')}`,
+          testResults: [
+            {
+              didRun: false,
+              passed: false,
+              fullName: '2 test-passed!',
+            },
+            {
+              didRun: false,
+              passed: false,
+              fullName: '2 test-failed!',
+            },
+          ],
+        },
+      ],
+    }),
+  )
+})
+
+test('assert summary structure - file is skipped', async t => {
+  const { entryPath, cleanup } = await createFolderStrucutre({
+    entryName: 'project1',
+    content: {
+      'package.json': {
+        name: 'test-project',
+        license: 'MIT',
+        scripts: {
+          test: `${t.context.jestPath} --runInBand`,
+        },
+        jest: {
+          reporters: ['default', [jestSimpleJsonReporterPath, {}]],
+        },
+      },
+      '.npmrc': 'registry=https://registry.npmjs.org/',
+      '__tests__/test1.spec.js': `
+                  describe('1', () => {
+                    test('test-passed1!', async () => {
+                        expect(1).toEqual(1)
+                      })
+                    test('test-passed2!', async () => {
+                        expect(2).toEqual(2)
+                      })
+                  })
+                  `,
+      '__tests__/test2.spec.js': `
+                  describe('2', () => {
+                    test.skip('test-passed!', async () => {
+                        expect(1).toEqual(1)
+                      })
+                    test.skip('test-failed!', async () => {
+                        expect(1).toEqual(2)
+                      })
+                  })
+                  `,
+    },
+  })
+  t.context.cleanup = cleanup
+
+  await execa('yarn', 'test'.split(' '), {
+    cwd: entryPath,
+    reject: false,
+  })
+
+  const expectedReport: JsonReporter = await fse.readJSON(
+    path.join(entryPath, 'jest-simple-json-reporter-results.json'),
+  )
+  t.deepEqual(
+    deepSort(expectedReport),
+    deepSort({
+      passed: true,
+      filesResult: [
+        {
+          passed: true,
+          path: `./${path.join('__tests__', 'test1.spec.js')}`,
+          testResults: [
+            {
+              didRun: true,
+              passed: true,
+              fullName: '1 test-passed1!',
+            },
+            {
+              didRun: true,
+              passed: true,
+              fullName: '1 test-passed2!',
+            },
+          ],
+        },
+        {
+          passed: true,
+          path: `./${path.join('__tests__', 'test2.spec.js')}`,
+          testResults: [
+            {
+              didRun: false,
+              passed: false,
+              fullName: '2 test-passed!',
+            },
             {
               didRun: false,
               passed: false,
