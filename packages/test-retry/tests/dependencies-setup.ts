@@ -37,6 +37,8 @@ export function binBeforeAll(test: TestInterface<TestContext>, { withSled }: { w
           license: 'MIT',
         },
       })
+
+      // im creating a yarn.lock with sled, then we the same lock file in all temp-projects so the installation will be faster.
       await execa.command(`yarn add --dev --registry "http://npm.dev.wixpress.com/" ${moduleName}@${moduleVersion}`, {
         cwd: entryPath,
         shell: true,

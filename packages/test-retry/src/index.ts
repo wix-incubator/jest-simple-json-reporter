@@ -7,9 +7,13 @@ import { runSpecificTests } from './run-tests'
 
 const chance = require('chance')
 
-process.on('unhandledRejection', () => {
-  // eslint-disable-next-line no-process-exit
-  process.exit(1)
+process.on('unhandledRejection', (a, b) => {
+  if (process.env['TEST_RETRY_TEST_MODE']) {
+    // in production, if a test failes, the test-runner exit with code !== 0 so we will get here always. to avoid node's message that we didn't catch the exacption, we ignore it.
+    // in local development of test-retry, some errors will be ignored if we dont print them.
+    console.error(a, b)
+  }
+  process.exitCode = 1
 })
 
 function main() {
