@@ -23,27 +23,35 @@ module.exports = class JestSimpleJsonReporter {
   }
 
   onRunComplete(contexts, results) {
-    const summary = {
-      filesResult: (results.testResults || [])
-        .map(fileResult => {
-          return {
-            path: calculatePath(process.cwd(), fileResult.testFilePath, this),
-            testResults: (fileResult.testResults || []).map(testResult => ({
-              didRun: testResult.status === 'failed' || testResult.status === 'passed',
-              passed: testResult.status === 'passed',
-              fullName: testResult.fullName,
-            })),
-          }
-        })
-        .map(fileResult => ({
-          ...fileResult,
-          passed: fileResult.testResults.every(testReuslt => !testReuslt.didRun || testReuslt.passed),
-        })),
+    try {
+      const summary = {
+        filesResult: (results.testResults || [])
+          .map(fileResult => {
+            return {
+              path: calculatePath(process.cwd(), fileResult.testFilePath, this),
+              testResults: (fileResult.testResults || []).map(testResult => ({
+                didRun: testResult.status === 'failed' || testResult.status === 'passed',
+                passed: testResult.status === 'passed',
+                fullName: testResult.fullName,
+              })),
+            }
+          })
+          .map(fileResult => ({
+            ...fileResult,
+            passed: fileResult.testResults.every(testReuslt => !testReuslt.didRun || testReuslt.passed),
+          })),
+      }
+
+      const passed = summary.filesResult.every(fileResult => fileResult.passed)
+      const finalSummary = { passed, ...summary }
+
+      fse.writeFileSync(this.outputPath, JSON.stringify(finalSummary, null, 2))
+    } catch (e) {
+      console.warn(
+        `test-retry - jest-simple-json-reporter - failed to eveluate and save original jest report to: "${
+          this.outputPath
+        }" : ${JSON.stringify(results, null, 2)}`,
+      )
     }
-
-    const passed = summary.filesResult.every(fileResult => fileResult.passed)
-    const finalSummary = { passed, ...summary }
-
-    fse.writeFileSync(this.outputPath, JSON.stringify(finalSummary, null, 2))
   }
 }
