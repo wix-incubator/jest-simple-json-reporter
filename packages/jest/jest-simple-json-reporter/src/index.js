@@ -47,10 +47,11 @@ module.exports = class JestSimpleJsonReporter {
 
       fse.writeFileSync(this.outputPath, JSON.stringify(finalSummary, null, 2))
     } catch (e) {
-      console.warn(
+      console.error(
         `test-retry - jest-simple-json-reporter - failed to eveluate and save original jest report to: "${
           this.outputPath
-        }" : ${JSON.stringify(results, null, 2)}`,
+        }" : ${JSON.stringify(results, null, 2)} - error:`,
+        e,
       )
     }
   }

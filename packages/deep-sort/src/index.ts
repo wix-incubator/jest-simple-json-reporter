@@ -2,8 +2,7 @@ import * as toHash from 'object-hash'
 
 type Literal = number | string | boolean
 type ObjectRef = { [key: string]: Ref }
-type ArrayRef = Ref[]
-type Ref = Literal | ArrayRef | ObjectRef
+type Ref = Literal | ObjectRef | (Literal | ObjectRef)[]
 
 export default function deepSort<T extends Ref>(ref: T): T {
   if (Array.isArray(ref)) {

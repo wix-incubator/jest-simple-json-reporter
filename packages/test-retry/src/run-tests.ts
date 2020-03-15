@@ -4,9 +4,37 @@ import { Options, TestRunner, S3Options } from './types'
 import * as execa from 'execa'
 import * as path from 'path'
 import { JsonReporter, TestResult } from '@wix/test-json-reporter-api'
+import * as minimist from 'minimist'
+import * as dargs from 'dargs'
 
 function escapeStringForValidRegex(str: string) {
   return str.replace(/(?=[[\](){}^$.?*+|\\"])/g, '\\')
+}
+
+// this function doesn't support flags that have values with spaces. thats why jest and jasmine "test-by-name" flags not supported :(
+function removeFlagsFromCommand({ command, removeFlags }: { command: string; removeFlags: string[] }) {
+  if (command.length === 0) {
+    return command
+  }
+
+  const argv = minimist(command.split(' '))
+
+  if (argv._.length > 0) {
+    // actual bug: https://runkit.com/embed/c5qbcxgugxf8
+    throw new Error(
+      `pls dont pass the executable (first word in the command) to this function. see attached link for more details. recieved command: "${command}"`,
+    )
+  }
+
+  const argvWithoutTestFiles = Object.entries(argv).reduce((acc, [key, value]) => {
+    if (removeFlags.includes(key)) {
+      return acc
+    } else {
+      return { ...acc, [key]: value }
+    }
+  }, {})
+
+  return dargs(argvWithoutTestFiles).join(' ')
 }
 
 function overridedUserCommand({
@@ -30,6 +58,7 @@ function overridedUserCommand({
         .filter(testResult => testResult.didRun && !testResult.passed)
         .map(testResult => testResult.fullName)
         .map(escapeStringForValidRegex)
+
       return {
         command: `${userTestCommand} -t "^${failedTestNames.join('|')}$"`,
       }
@@ -49,9 +78,20 @@ function overridedUserCommand({
       const failedTestFiles = report.filesResult
         .filter(fileResult => !fileResult.passed)
         .map(fileResult => fileResult.path)
+        .map(filePath => (filePath.startsWith('./sled/') ? filePath.replace('./sled/', '') : filePath))
+
+      const userCommandWithoutTestFilesFlag = removeFlagsFromCommand({
+        command: userTestCommand
+          .replace('sled-test-runner', '')
+          .replace(/(remote|local)/, '')
+          .trim(),
+        removeFlags: ['f', 'test-path-pattern'],
+      })
 
       return {
-        command: `${userTestCommand} -f "${failedTestFiles.join('|')}"`,
+        command: `sled-test-runner ${
+          testRunner === TestRunner.sledRemote ? 'remote' : 'local'
+        } ${userCommandWithoutTestFilesFlag} -f "${failedTestFiles.join('|')}"`,
         env,
       }
     }
@@ -105,8 +145,8 @@ async function saveReportsToS3(options: Options): Promise<void> {
 
 async function runTests(options: Options, command: string, env: { [key: string]: string }): Promise<void> {
   console.log('test-retry - test-command:', env ? JSON.stringify(env, null, 2) : '', command)
-  try {
-    await execa.command(command, {
+  await execa
+    .command(command, {
       cwd: options.cwd,
       stdio: 'inherit',
       shell: true,
@@ -115,9 +155,7 @@ async function runTests(options: Options, command: string, env: { [key: string]:
         ...env,
       },
     })
-  } finally {
-    await saveReportsToS3(options)
-  }
+    .finally(() => saveReportsToS3(options))
 }
 
 export async function runSpecificTests(options: Options): Promise<void> {
