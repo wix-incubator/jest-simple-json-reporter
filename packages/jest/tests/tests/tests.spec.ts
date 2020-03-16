@@ -767,6 +767,8 @@ test('assert summary structure - file is skipped', async t => {
     reject: false,
   })
 
+  t.truthy(await fse.pathExists(path.join(entryPath, './original-jest-report.json')))
+
   const expectedReport: JsonReporter = await fse.readJSON(
     path.join(entryPath, 'jest-simple-json-reporter-results.json'),
   )
