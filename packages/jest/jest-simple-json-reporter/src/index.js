@@ -24,9 +24,7 @@ module.exports = class JestSimpleJsonReporter {
 
   onRunComplete(contexts, results) {
     try {
-      if (process.env.TEST_RETRY_DEBUG) {
-        console.log(`test-retry - original-jest-report: ${JSON.stringify(results, null, 2)}`)
-      }
+      console.log(`test-retry - original-jest-report: ${JSON.stringify(results, null, 2)}`)
       const summary = {
         filesResult: (results.testResults || [])
           .map(fileResult => {
