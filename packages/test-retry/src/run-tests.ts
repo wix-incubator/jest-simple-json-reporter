@@ -112,6 +112,19 @@ function getS3Options(options: Options): { bucket: string; key: string } {
 
 async function saveReportsToS3(options: Options): Promise<void> {
   try {
+    const report = await fse.readJSON(options.originalReportPath)
+    const s3Options = {
+      bucket: options.s3BucketNameForTestsReports,
+      key: `${getTestReportsS3Key(options)}-original-report`,
+    }
+    await saveToS3({
+      ...s3Options,
+      value: JSON.stringify(report),
+    })
+  } catch (e) {
+    console.error(`could not find/upload original report of the test-runner to s3`)
+  }
+  try {
     console.log('test-retry - searching for the test-report locally')
     const isReportExist = await new Promise(res => fse.exists(options.reportPath, res))
     if (!isReportExist) {

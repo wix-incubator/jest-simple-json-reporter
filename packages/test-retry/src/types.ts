@@ -11,6 +11,7 @@ export type Options = {
   srcMd5: string
   s3BucketNameForTestsReports: string
   reportPath: string
+  originalReportPath: string
   testRunner: TestRunner
 }
 

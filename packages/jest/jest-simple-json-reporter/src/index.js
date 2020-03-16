@@ -17,6 +17,7 @@ module.exports = class JestSimpleJsonReporter {
   constructor(globalConfig, options = {}) {
     this.outputPath =
       process.env['TEST_JSON_REPORTER_OUTPUT_PATH'] || options.outputPath || './jest-simple-json-reporter-results.json'
+    this.originalOutputPath = options.outputPath || './original-jest-report.json'
     this.useAbsolutePaths =
       process.env['TEST_JSON_REPORTER_USE_ABSOLUTE_PATHS'] === 'true' || options.useAbsolutePaths || false
     this.keepPathAsIs = process.env['KEEP_PATH_AS_IS']
@@ -45,10 +46,11 @@ module.exports = class JestSimpleJsonReporter {
       const passed = summary.filesResult.every(fileResult => fileResult.passed)
       const finalSummary = { passed, ...summary }
 
+      fse.writeFileSync(this.originalOutputPath, JSON.stringify(results, null, 2))
       fse.writeFileSync(this.outputPath, JSON.stringify(finalSummary, null, 2))
     } catch (e) {
       console.error(
-        `test-retry - jest-simple-json-reporter - failed to eveluate and save original jest report to: "${
+        `test-retry - jest-simple-json-reporter - failed to eveluate and save jest report to: "${
           this.outputPath
         }" : ${JSON.stringify(results, null, 2)} - error:`,
         e,
