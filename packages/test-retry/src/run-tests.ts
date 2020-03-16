@@ -110,39 +110,6 @@ function getS3Options(options: Options): { bucket: string; key: string } {
   }
 }
 
-async function saveOriginalReportToS3(options: Options): Promise<void> {
-  try {
-    console.log('test-retry - searching for the original-test-report locally')
-    const isReportExist = await new Promise(res => fse.exists(options.originalReportPath, res))
-    if (!isReportExist) {
-      throw new Error(
-        `test-retry - original-test-report is missing locally in path: "${options.originalReportPath}". please check that you are using the appropriate test-reporter`,
-      )
-    }
-    console.log(`test-retry - found original-test-report locally on path: "${options.originalReportPath}".`)
-    const report = await fse.readJSON(options.originalReportPath)
-    const s3Options = {
-      bucket: options.s3BucketNameForTestsReports,
-      key: `${getTestReportsS3Key(options)}-original-report`,
-    }
-    await saveToS3({
-      ...s3Options,
-      value: JSON.stringify(report),
-    }).catch(e =>
-      Promise.reject(
-        new Error(
-          `test-retry - could not save original-test-report in s3 bucket: "${s3Options.bucket}", in key: "${s3Options.key}". error: ${e}`,
-        ),
-      ),
-    )
-    console.log(
-      `test-retry - original-test-report was uploaded succesfully to s3 bucket: "${s3Options.bucket}", in key: "${s3Options.key}".`,
-    )
-  } catch (e) {
-    console.error(`test-retry - couldn't upload original-test-report ${options.originalReportPath} to s3.`, e)
-  }
-}
-
 async function saveReportToS3(options: Options): Promise<void> {
   try {
     console.log('test-retry - searching for the test-report locally')
@@ -188,7 +155,6 @@ async function runTests(options: Options, command: string, env: { [key: string]:
         ...env,
       },
     })
-    .finally(() => saveOriginalReportToS3(options))
     .finally(() => saveReportToS3(options))
 }
 

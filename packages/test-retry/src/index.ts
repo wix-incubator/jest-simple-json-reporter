@@ -33,7 +33,6 @@ function main() {
   const options: Options = {
     cwd,
     reportPath: path.join(cwd, `test-report-${chance().hash()}.json`),
-    originalReportPath: path.join(cwd, `original-jest-report.json`),
     s3BucketNameForTestsReports: 'wix-ci-results',
     srcMd5: process.env['SRC_MD5'] as Options['srcMd5'],
     testRunner: argv['test-runner'] as Options['testRunner'],
