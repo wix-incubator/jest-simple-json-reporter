@@ -13,7 +13,7 @@
   ],
   "scripts": {
     "test": "TEST_RETRY_TEST_MODE=true yarn ava --verbose",
-    "build": "lerna run build",
+    "build": "lerna run --sort build",
     "prettier": "yarn pretty-quick"
   },
   "devDependencies": {

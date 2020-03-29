@@ -20,7 +20,7 @@
   "license": "ISC",
   "scripts": {
     "clean": "rm -rf dist",
-    "build": "yarn clean && yarn tsc && chmod u+x ./dist/index.js"
+    "build": "yarn tsc && chmod u+x ./dist/index.js"
   },
   "dependencies": {
     "aws-sdk": "2.622.0",

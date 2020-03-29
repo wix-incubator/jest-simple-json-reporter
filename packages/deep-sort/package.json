@@ -1,10 +1,14 @@
 {
   "name": "@wix/deep-sort",
   "version": "1.0.0",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
   "author": "stavalfi <stava@wix.com>",
   "license": "MIT",
   "private": false,
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build": "yarn tsc"
+  },
   "repository": {
     "url": "https://github.com/wix-incubator/jest-simple-json-reporter"
   },
