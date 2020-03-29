@@ -21,6 +21,8 @@
   },
   "files": [
     "src",
+    "dist",
+    "tests",
     "README.md"
   ]
 }
