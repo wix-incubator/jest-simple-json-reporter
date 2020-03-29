@@ -1,17 +1,16 @@
 import testWithTypedContext, { TestInterface } from 'ava'
 import createFolderStrucutre from 'create-folder-structure'
 import * as execa from 'execa'
-import { binBeforeAll, ciEnv, installSledProject } from './dependencies-setup'
-import { s3BeforeAfterEach } from './s3-mock-setup'
+import { ciEnv, installSledProject } from './dependencies-setup'
 import { TestContext } from './types'
 
 const testAva = testWithTypedContext as TestInterface<TestContext>
 
-s3BeforeAfterEach(testAva)
+const test = testAva.skip
 
-binBeforeAll(testAva, { withSled: true })
+// s3BeforeAfterEach(testAva)
 
-const test = testAva.serial
+// binBeforeAll(testAva, { withSled: true })
 
 test('mode:local - single test - fail -> pass -> skip', async t => {
   const generateProject = async ({ test1_1Pass }: { test1_1Pass: boolean }) => {
