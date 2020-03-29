@@ -6,24 +6,27 @@ type Ref = Literal | ObjectRef | (Literal | ObjectRef)[]
 
 export default function deepSort<T extends Ref>(ref: T): T {
   if (Array.isArray(ref)) {
-    const hashToCell: ObjectRef = ref.reduce((acc, cell) => ({ ...acc, [toHash(cell)]: cell }), {})
+    const hashToCell: ObjectRef = ref.reduce<ObjectRef>(
+      (acc, cell) => Object.assign({}, acc, { [toHash(cell)]: cell }),
+      {},
+    )
     const sortedArray = ref
-      .map(cell => toHash(cell))
+      .map<string>(cell => toHash(cell))
       .sort()
-      .map(hash => hashToCell[hash]) as T
+      .map<Ref>(hash => hashToCell[hash])
 
-    return sortedArray
+    return sortedArray as T
   }
+
   if (typeof ref === 'object') {
     const objWithSortedValues = Object.entries(ref)
-      .map(([key, value]) => [key, deepSort(value)])
-      .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {}) as T
+      .map<[string, Ref]>(([key, value]) => [key, deepSort(value)])
+      .reduce<Ref>((acc, [key, value]) => Object.assign({}, acc, { [key]: value }), {})
     const sortedObj = Object.keys(objWithSortedValues)
       .sort()
-      // @ts-ignore
-      .reduce((acc, key) => ({ ...acc, [key]: objWithSortedValues[key] }), {}) as T
+      .reduce<Ref>((acc, key) => Object.assign({}, acc, { [key]: objWithSortedValues[key] }), {})
 
-    return sortedObj
+    return sortedObj as T
   }
   return ref
 }
