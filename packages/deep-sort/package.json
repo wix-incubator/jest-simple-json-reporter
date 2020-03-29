@@ -2,6 +2,7 @@
   "name": "@wix/deep-sort",
   "version": "1.0.0",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "author": "stavalfi <stava@wix.com>",
   "license": "MIT",
   "private": false,
