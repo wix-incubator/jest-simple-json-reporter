@@ -47,8 +47,11 @@ test('complex object with easy-to-sort data - ensure the result is currect', t =
   t.deepEqual(actual.d, 8)
   if (Array.isArray(actual.a[1])) {
     t.true(typeof actual.a[0] === 'object' && !Array.isArray(actual.a[0]))
+    //@ts-ignore
     t.deepEqual(actual.a[0]['b'], 1)
+    //@ts-ignore
     t.deepEqual(actual.a[0]['c'].length, 2)
+    //@ts-ignore
     t.true(actual.a[0]['c'].includes(2) && actual.a[0]['c'].includes(3))
     //
     t.deepEqual(actual.a[1].length, 2)

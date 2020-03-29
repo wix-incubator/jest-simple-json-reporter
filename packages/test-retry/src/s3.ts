@@ -1,4 +1,4 @@
-import * as aws from 'aws-sdk'
+import aws from 'aws-sdk'
 
 function getAWSCredentials() {
   return !process.env.NPM_CI_AWS_ACCESS_KEY || !process.env.NPM_CI_AWS_SECRET_ACCESS_KEY

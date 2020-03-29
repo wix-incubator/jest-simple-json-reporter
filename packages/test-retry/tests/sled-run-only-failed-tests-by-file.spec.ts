@@ -1,6 +1,6 @@
 import testWithTypedContext, { TestInterface } from 'ava'
 import createFolderStrucutre from 'create-folder-structure'
-import * as execa from 'execa'
+import execa from 'execa'
 import { ciEnv, installSledProject } from './dependencies-setup'
 import { TestContext } from './types'
 

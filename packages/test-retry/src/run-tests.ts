@@ -1,11 +1,11 @@
-import * as fse from 'fs-extra'
+import fse from 'fs-extra'
 import { hasKeyInS3, readFromS3, saveToS3 } from './s3'
 import { Options, TestRunner, S3Options } from './types'
-import * as execa from 'execa'
-import * as path from 'path'
+import execa from 'execa'
+import path from 'path'
 import { JsonReporter, TestResult } from '@wix/test-json-reporter-api'
-import * as minimist from 'minimist'
-import * as dargs from 'dargs'
+import minimist from 'minimist'
+import dargs from 'dargs'
 
 function escapeStringForValidRegex(str: string) {
   return str.replace(/(?=[[\](){}^$.?*+|\\"])/g, '\\')

@@ -2281,6 +2281,11 @@
   version "8.10.59"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/@types/node/-/node-8.10.59.tgz#9e34261f30183f9777017a13d185dfac6b899e04"
 
+"@types/object-hash@^1.3.1":
+  version "1.3.1"
+  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/@types/object-hash/-/object-hash-1.3.1.tgz#b8145122b230bad5a13cba52016e78c54dae6ed5"
+  integrity sha1-uBRRIrIwutWhPLpSAW54xU2ubtU=
+
 "@types/path-exists@^4.0.2":
   version "4.0.2"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/@types/path-exists/-/path-exists-4.0.2.tgz#4565cc53c0dc28867f60f06fd90f49ce390920e7"
@@ -2290,6 +2295,13 @@
 "@types/puppeteer@^1.12.2":
   version "1.20.3"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/@types/puppeteer/-/puppeteer-1.20.3.tgz#9cccd94b649237136c02a41c21f959d9db8e3b41"
+  dependencies:
+    "@types/node" "*"
+
+"@types/s3rver@^0.0.32":
+  version "0.0.32"
+  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/@types/s3rver/-/s3rver-0.0.32.tgz#13d391aa266d945f8883b1c654bc2aa1a0d293c5"
+  integrity sha1-E9ORqiZtlF+Ig7HGVLwqoaDSk8U=
   dependencies:
     "@types/node" "*"
 

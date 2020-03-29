@@ -1,9 +1,9 @@
 import deepSort from '@wix/deep-sort'
 import testWithTypedContext, { TestInterface } from 'ava'
 import createFolderStrucutre from 'create-folder-structure'
-import * as execa from 'execa'
-import * as fse from 'fs-extra'
-import * as path from 'path'
+import execa from 'execa'
+import fse from 'fs-extra'
+import path from 'path'
 import { JsonReporter } from '@wix/test-json-reporter-api'
 import { promisify } from 'util'
 

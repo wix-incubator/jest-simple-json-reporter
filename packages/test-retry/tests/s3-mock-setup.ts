@@ -1,7 +1,7 @@
 /* eslint-disable new-cap */
 /* eslint-disable no-undef */
 
-import * as S3rver from 's3rver'
+import S3rver from 's3rver'
 import { S3 } from 'aws-sdk'
 import createFolderStrucutre from 'create-folder-structure'
 import { TestInterface } from 'ava'
@@ -19,7 +19,10 @@ async function createS3Server(): Promise<{
       hostname: 'localhost',
       silent: true,
       directory: emptyTempFolder.entryPath,
+      resetOnClose: true,
+      // @ts-ignore
       removeBucketsOnClose: true,
+      // @ts-ignore
     }).run((err, { address = '', port = '' } = {}) => {
       if (err) {
         return reject(err)

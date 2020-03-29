@@ -1,14 +1,14 @@
-import * as toHash from 'object-hash'
+import toHash from 'object-hash'
 
 type Literal = number | string | boolean
-type ObjectRef = { [key: string]: Ref } | {}
+type ObjectRef = { [key: string]: any }
 type Ref = Literal | ObjectRef | (Literal | ObjectRef)[]
 
 export default function deepSort<T extends Ref>(ref: T): T {
   if (Array.isArray(ref)) {
     const hashToCell: ObjectRef = ref.reduce<ObjectRef>((acc, cell) => ({ ...acc, [toHash(cell)]: cell }), {})
     const sortedArray = ref
-      .map<string>(cell => toHash(cell))
+      .map(cell => toHash(cell))
       .sort()
       .map<Ref>(hash => hashToCell[hash])
 

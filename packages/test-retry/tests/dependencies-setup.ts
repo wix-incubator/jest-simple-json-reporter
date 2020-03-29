@@ -1,9 +1,9 @@
 import { TestInterface } from 'ava'
-import * as execa from 'execa'
-import * as fse from 'fs-extra'
-import * as path from 'path'
-import * as isCi from 'is-ci'
-import * as pkgUp from 'pkg-up'
+import execa from 'execa'
+import fse from 'fs-extra'
+import path from 'path'
+import isCi from 'is-ci'
+import pkgUp from 'pkg-up'
 import { promisify } from 'util'
 import { TestContext } from './types'
 import { createFolder } from 'create-folder-structure'
@@ -20,7 +20,9 @@ export function binBeforeAll(test: TestInterface<TestContext>, { withSled }: { w
     t.context.bin = {
       jestPath,
       tsNodePath,
-      testRetryPath: isCi ? require.resolve('../dist/index.js') : `${tsNodePath} ${require.resolve('../src/index.ts')}`,
+      testRetryPath: isCi
+        ? require.resolve('../dist/index.js')
+        : `${tsNodePath} -P ${path.join(__dirname, '../../../tsconfig.json')} ${require.resolve('../src/index.ts')}`,
     }
     if (withSled) {
       const moduleName = 'sled-test-runner'

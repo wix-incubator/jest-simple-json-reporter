@@ -1,6 +1,6 @@
 import testWithTypedContext, { TestInterface } from 'ava'
 import { createFolder } from 'create-folder-structure'
-import * as execa from 'execa'
+import execa from 'execa'
 import { s3BeforeAfterEach } from './s3-mock-setup'
 import { TestContext } from './types'
 import { binBeforeAll, ciEnv, jestSimpleJsonReporterPath } from './dependencies-setup'

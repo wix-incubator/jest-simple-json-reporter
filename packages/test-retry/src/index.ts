@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-import * as yargs from 'yargs'
+import yargs from 'yargs'
 import { Options } from './types'
-import * as path from 'path'
-import * as isCi from 'is-ci'
+import path from 'path'
+import isCi from 'is-ci'
 import { runSpecificTests } from './run-tests'
 
 const chance = require('chance')
