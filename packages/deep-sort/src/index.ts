@@ -1,7 +1,7 @@
 import * as toHash from 'object-hash'
 
 type Literal = number | string | boolean
-type ObjectRef = { [key: string]: Ref }
+type ObjectRef = { [key: string]: Ref } | {}
 type Ref = Literal | ObjectRef | (Literal | ObjectRef)[]
 
 export default function deepSort<T extends Ref>(ref: T): T {
