@@ -2983,20 +2983,6 @@ ava@2.x.x:
     update-notifier "^3.0.1"
     write-file-atomic "^3.0.0"
 
-aws-sdk@2.622.0:
-  version "2.622.0"
-  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/aws-sdk/-/aws-sdk-2.622.0.tgz#8f006f082c32ad6fc11df9bbecfd55c8d8c9a5c2"
-  dependencies:
-    buffer "4.9.1"
-    events "1.1.1"
-    ieee754 "1.1.13"
-    jmespath "0.15.0"
-    querystring "0.2.0"
-    sax "1.2.1"
-    url "0.10.3"
-    uuid "3.3.2"
-    xml2js "0.4.19"
-
 aws-sdk@^2.218.1, aws-sdk@^2.610.0:
   version "2.624.0"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/aws-sdk/-/aws-sdk-2.624.0.tgz#c30d7ab8a3c81aa21630bd73e9bac71e16347cc5"
@@ -3517,7 +3503,7 @@ chalk@^3.0.0:
     ansi-styles "^4.1.0"
     supports-color "^7.1.0"
 
-chance@1.1.4, chance@^1.1.4:
+chance@^1.1.4:
   version "1.1.4"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/chance/-/chance-1.1.4.tgz#d8743bf8e40bb05e024c305ca1ff441195eb23db"
 
@@ -4083,7 +4069,7 @@ cyclist@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/cyclist/-/cyclist-1.0.1.tgz#596e9698fd0c80e12038c2b82d6eb1b35b6224d9"
 
-dargs@*, dargs@^7.0.0:
+dargs@*:
   version "7.0.0"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/dargs/-/dargs-7.0.0.tgz#04015c41de0bcb69ec84050f3d9be0caf8d6d5cc"
   integrity sha1-BAFcQd4Ly2nshAUPPZvgyvjW1cw=
@@ -4831,20 +4817,6 @@ exec-sh@^0.3.2:
   version "0.3.4"
   resolved "https://registry.yarnpkg.com/exec-sh/-/exec-sh-0.3.4.tgz#3a018ceb526cc6f6df2bb504b2bfe8e3a4934ec5"
 
-execa@4.0.0, execa@^4.0.0:
-  version "4.0.0"
-  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/execa/-/execa-4.0.0.tgz#7f37d6ec17f09e6b8fc53288611695b6d12b9daf"
-  dependencies:
-    cross-spawn "^7.0.0"
-    get-stream "^5.0.0"
-    human-signals "^1.1.1"
-    is-stream "^2.0.0"
-    merge-stream "^2.0.0"
-    npm-run-path "^4.0.0"
-    onetime "^5.1.0"
-    signal-exit "^3.0.2"
-    strip-final-newline "^2.0.0"
-
 execa@^0.7.0:
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/execa/-/execa-0.7.0.tgz#944becd34cc41ee32a63a9faf27ad5a65fc59777"
@@ -4895,6 +4867,20 @@ execa@^3.2.0:
     npm-run-path "^4.0.0"
     onetime "^5.1.0"
     p-finally "^2.0.0"
+    signal-exit "^3.0.2"
+    strip-final-newline "^2.0.0"
+
+execa@^4.0.0:
+  version "4.0.0"
+  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/execa/-/execa-4.0.0.tgz#7f37d6ec17f09e6b8fc53288611695b6d12b9daf"
+  dependencies:
+    cross-spawn "^7.0.0"
+    get-stream "^5.0.0"
+    human-signals "^1.1.1"
+    is-stream "^2.0.0"
+    merge-stream "^2.0.0"
+    npm-run-path "^4.0.0"
+    onetime "^5.1.0"
     signal-exit "^3.0.2"
     strip-final-newline "^2.0.0"
 
@@ -5367,7 +5353,7 @@ from2@^2.1.0:
     inherits "^2.0.1"
     readable-stream "^2.0.0"
 
-fs-extra@8.1.0, fs-extra@^8.0.0, fs-extra@^8.0.1, fs-extra@^8.1.0:
+fs-extra@^8.0.0, fs-extra@^8.0.1, fs-extra@^8.1.0:
   version "8.1.0"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/fs-extra/-/fs-extra-8.1.0.tgz#49d43c45a88cd9677668cb7be1b46efdb8d2e1c0"
   dependencies:
@@ -6082,17 +6068,17 @@ is-callable@^1.1.4, is-callable@^1.1.5:
   version "1.1.5"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/is-callable/-/is-callable-1.1.5.tgz#f7e46b596890456db74e7f6e976cb3273d06faab"
 
-is-ci@2.0.0, is-ci@^2.0.0:
-  version "2.0.0"
-  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/is-ci/-/is-ci-2.0.0.tgz#6bc6334181810e04b5c22b3d589fdca55026404c"
-  dependencies:
-    ci-info "^2.0.0"
-
 is-ci@^1.0.10:
   version "1.2.1"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/is-ci/-/is-ci-1.2.1.tgz#e3779c8ee17fccf428488f6e281187f2e632841c"
   dependencies:
     ci-info "^1.5.0"
+
+is-ci@^2.0.0:
+  version "2.0.0"
+  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/is-ci/-/is-ci-2.0.0.tgz#6bc6334181810e04b5c22b3d589fdca55026404c"
+  dependencies:
+    ci-info "^2.0.0"
 
 is-data-descriptor@^0.1.4:
   version "0.1.4"
@@ -8055,11 +8041,6 @@ minimist@^1.1.1, minimist@^1.1.3, minimist@^1.2.0:
   version "1.2.0"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/minimist/-/minimist-1.2.0.tgz#a35008b20f41383eec1fb914f4cd5df79a264284"
 
-minimist@^1.2.4:
-  version "1.2.4"
-  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/minimist/-/minimist-1.2.4.tgz#40357ef9582f8cd42ba8eaa274ddcf27f0c979b7"
-  integrity sha1-QDV++VgvjNQrqOqidN3PJ/DJebc=
-
 minimist@~0.0.1:
   version "0.0.10"
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-0.0.10.tgz#de3f98543dbf96082be48ad1a0c7cda836301dcf"
@@ -8489,10 +8470,6 @@ object-copy@^0.1.0:
     copy-descriptor "^0.1.0"
     define-property "^0.2.5"
     kind-of "^3.0.3"
-
-object-hash@^2.0.2:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/object-hash/-/object-hash-2.0.3.tgz#d12db044e03cd2ca3d77c0570d87225b02e1e6ea"
 
 object-inspect@^1.7.0:
   version "1.7.0"
@@ -10739,7 +10716,7 @@ to-regex-range@^5.0.1:
   dependencies:
     is-number "^7.0.0"
 
-to-regex@3.0.2, to-regex@^3.0.1, to-regex@^3.0.2:
+to-regex@^3.0.1, to-regex@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/to-regex/-/to-regex-3.0.2.tgz#13cfdd9b336552f30b51f33a8ae1b42a7a7599ce"
   dependencies:
@@ -11056,8 +11033,9 @@ uri-js@^4.2.2:
     punycode "^2.1.0"
 
 urijs@^1.19.0:
-  version "1.19.2"
-  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/urijs/-/urijs-1.19.2.tgz#f9be09f00c4c5134b7cb3cf475c1dd394526265a"
+  version "1.19.5"
+  resolved "https://registry.yarnpkg.com/urijs/-/urijs-1.19.5.tgz#119683ab4b2fb0bd637e5ea6dd9117bcac68d3e4"
+  integrity sha512-48z9VGWwdCV5KfizHsE05DWS5fhK6gFlx5MjO7xu0Krc5FGPWzjlXEVV0nPMrdVuP7xmMHiPZ2HoYZwKOFTZOg==
 
 urix@^0.1.0:
   version "0.1.0"
@@ -11610,7 +11588,7 @@ yargs@^14.2.2:
     y18n "^4.0.0"
     yargs-parser "^15.0.0"
 
-yargs@^15.0.0, yargs@^15.1.0:
+yargs@^15.0.0:
   version "15.1.0"
   resolved "https://registry.yarnpkg.com/yargs/-/yargs-15.1.0.tgz#e111381f5830e863a89550bd4b136bb6a5f37219"
   dependencies:
